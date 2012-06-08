@@ -1,6 +1,6 @@
 from django.db import models
 from smartmin.models import SmartModel
-import eyeD3
+import mutagen
 
 class Artist(SmartModel):
     name = models.CharField(max_length=64, unique=True,
@@ -44,45 +44,47 @@ class Track(SmartModel):
         Creates a new Track, Album and Artist from the given mp3 file.  You will be returned
         a Track object with the associated items
         """
-        tag = eyeD3.Tag()
-        tag.link(mp3_file)
+	
+	audio = mutagen.File(mp3_file, easy=True)
+        
 
-        genres = Genre.objects.filter(name__iexact=tag.getGenre().name)
+        genres = Genre.objects.filter(name__iexact=audio['genre'][0])
         if not genres:
-            genre = Genre.objects.create(name=tag.getGenre().name,
+            genre = Genre.objects.create(name=audio['genre'][0],
                                          created_by=user,
                                          modified_by=user)
         else:
             genre = genres[0]
 
-        artists = Artist.objects.filter(name__iexact=tag.getArtist())
+        artists = Artist.objects.filter(name__iexact=audio['artist'][0])
         if not artists:
-            artist = Artist.objects.create(name=tag.getArtist(),
+            artist = Artist.objects.create(name=audio['artist'][0],
                                            created_by=user,
                                            modified_by=user)
         else:
             artist = artists[0]
 
-        albums = Album.objects.filter(name__iexact=tag.getAlbum())
+        albums = Album.objects.filter(name__iexact=audio['album'][0])
         if not albums:
-            album = Album.objects.create(name=tag.getAlbum(),
+            album = Album.objects.create(name=audio['album'][0],
                                          artist=artist,
-                                         year=tag.getYear(),
+                                         year=audio['date'][0],
                                          created_by=user,
                                          modified_by=user)
         else:
             album = albums[0]
 
-        tracks = Track.objects.filter(name__iexact=tag.getTitle(),
+        tracks = Track.objects.filter(name__iexact=audio['title'][0],
                                       album=album)
         if tracks:
             track = tracks[0]
             track.mp3_file =  mp3_file
             track.save()
         else:
-            track = Track.objects.create(name=tag.getTitle(),
+            track = Track.objects.create(name=audio['title'][0],
                                          album=album,
                                          genre=genre,
+										length = audio.info.length,
                                          created_by=user,
                                          modified_by=user)
 

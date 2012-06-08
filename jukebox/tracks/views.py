@@ -3,7 +3,7 @@ from .models import *
 
 class ArtistCRUDL(SmartCRUDL):
     model = Artist
-    actions = ('create', 'list', 'read', 'update')
+    actions = ('list', 'read', 'update')
 
     class List(SmartListView):
         fields = ('name', 'created_on')
@@ -45,7 +45,7 @@ class TrackCRUDL(SmartCRUDL):
 
 class AlbumCRUDL(SmartCRUDL):
     model = Album
-    actions = ('create', 'list', 'read', 'update')
+    actions = ('list', 'read', 'update')
 
     class List(SmartListView):
         fields = ('name', 'artist', 'year')
@@ -53,7 +53,7 @@ class AlbumCRUDL(SmartCRUDL):
 
 class GenreCRUDL(SmartCRUDL):
     model = Genre
-    actions = ('create', 'list', 'read', 'update')
+    actions = ('list', 'read', 'update')
 
     class List(SmartListView):
         fields = ('name',)
