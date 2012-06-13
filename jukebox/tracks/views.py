@@ -19,11 +19,17 @@ class TrackCRUDL(SmartCRUDL):
 
         def pre_save(self, obj):
             obj = super(TrackCRUDL.Create, self).pre_save(obj)
-            return Track.create_from_file(obj.mp3_file.file.temporary_file_path(), obj.created_by)
+            track = Track.create_from_file(obj.mp3_file.file.temporary_file_path(),
+                                           obj.created_by)
+            track.mp3_file = obj.mp3_file
+            return track
 
     class List(SmartListView):
-        fields = ('name', 'artist', 'length', 'genre', 'album')
+        fields = ('name', 'artist', 'length', 'genre', 'album', 'request')
         search_fields = ('name__icontains', 'album__artist__name__icontains')
+
+        def get_request(self, obj):
+            return '<a class="btn posterize" href="%s?track=%d">Request</a>' % (reverse('requests.request_new'), obj.id)
 
         def get_artist(self, obj):
             if obj.album:

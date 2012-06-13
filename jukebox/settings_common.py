@@ -186,11 +186,11 @@ INSTALLED_APPS = (
     # console
     'nsms.console',
 
-    # our sample app
-    'mileage',
-
     # tracks
     'tracks',
+
+    # requests
+    'requests',
 )
 
 # A sample logging configuration. The only tangible logging

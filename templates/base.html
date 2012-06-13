@@ -43,6 +43,10 @@
         <div class="nav-collapse">
 
         <ul class="nav">
+          {% if perms.requests.request_list %}
+          <li><a href="{% url requests.request_list %}">Playlist</a></li>
+          {% endif %}
+
           {% if perms.tracks.artist_list %}
           <li><a href="{% url tracks.artist_list %}">Artists</a></li>
           {% endif %}
