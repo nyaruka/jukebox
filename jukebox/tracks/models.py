@@ -1,6 +1,10 @@
 from django.db import models
 from smartmin.models import SmartModel
+from mutagen.mp3 import MP3
 import mutagen
+from tempfile import mktemp
+import os
+from django.core.files import File
 
 class Artist(SmartModel):
     name = models.CharField(max_length=64, unique=True,
@@ -14,7 +18,25 @@ class Album(SmartModel):
                          help_text="The name of this album")
     artist = models.ForeignKey(Artist,
                            help_text="The artist who recorded this album")
-    year = models.IntegerField(help_text="The year this album was released")
+    year = models.IntegerField(null=True, blank=True,
+                               help_text="The year this album was released")
+    cover = models.ImageField(upload_to="covers", null=True, blank=True,
+                              help_text="The cover art if there is one")
+
+    def update_album_art(self, mp3_file):
+        mp3_data = MP3(mp3_file)
+
+        if 'APIC:' in mp3_data:
+            tmp_name = mktemp()
+            tmp_file = open(tmp_name, 'wb')
+            tmp_file.write(mp3_data['APIC:'].data)
+            tmp_file.close()
+
+            tmp_file = open(tmp_name, 'r')
+            self.cover.save('%s.jpg' % self.name, File(tmp_file), save=True)
+            self.save()
+            
+            os.unlink(tmp_name)
 
     def __unicode__(self):
         return self.name
@@ -26,27 +48,25 @@ class Genre(SmartModel):
     def __unicode__(self):
         return self.name
 
-class Track(SmartModel):
+class Track(SmartModel): 
     name = models.CharField(max_length=128, 
                             help_text="The name of this track")
     length = models.IntegerField(null=True,
                                  help_text="The length of this track in seconds")
     genre = models.ForeignKey(Genre, null=True, blank=True,
                               help_text="The genre for this track")
-    album = models.ForeignKey(Album, null=True, blank=True,
+    album = models.ForeignKey(Album, null=True, blank=True, related_name='tracks',
                               help_text="What album this track belongs to")
     mp3_file = models.FileField(upload_to="mp3s",
                                 help_text="The mp3 file that contains the music")
 
-    @classmethod
-    def create_from_file(cls, mp3_file, user):
+    def update_from_file(self, mp3_file):
         """
         Creates a new Track, Album and Artist from the given mp3 file.  You will be returned
         a Track object with the associated items
         """
-	
 	audio = mutagen.File(mp3_file, easy=True)
-        
+        user = self.created_by
 
         genres = Genre.objects.filter(name__iexact=audio['genre'][0])
         if not genres:
@@ -68,27 +88,19 @@ class Track(SmartModel):
         if not albums:
             album = Album.objects.create(name=audio['album'][0],
                                          artist=artist,
-                                         year=audio['date'][0],
+                                         year=audio.get('date', [None])[0],
                                          created_by=user,
                                          modified_by=user)
         else:
             album = albums[0]
 
-        tracks = Track.objects.filter(name__iexact=audio['title'][0],
-                                      album=album)
-        if tracks:
-            track = tracks[0]
-            track.mp3_file =  mp3_file
-            track.save()
-        else:
-            track = Track.objects.create(name=audio['title'][0],
-                                         album=album,
-                                         genre=genre,
-										length = audio.info.length,
-                                         created_by=user,
-                                         modified_by=user)
+        self.name = audio['title'][0]
+        self.album = album
+        self.genre = genre
+        self.length = audio.info.length
 
-        return track
+        return self
+
 
     def __unicode__(self):
         return self.name

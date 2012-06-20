@@ -1,0 +1,19 @@
+{% extends "smartmin/read.html" %}
+
+{% block content %}
+
+<img src="{{ MEDIA_URL }}{{ album.cover }}" width="200"/>
+<h2>{{ album.name }} by {{ album.artist.name }} in {{ album.year }}</h2>
+
+<h1>Tracks</h1>
+<table class="table">
+{% for track in album.tracks.all %}
+<tr>
+  <td>{{ track.name }}</td>
+  <td>{{ track.length }}</td>
+  <td><a href="{% url requests.request_new %}?track={{track.id}}" class="btn posterize">Request</a>
+</tr>
+{% endfor %}
+</table>
+
+{% endblock %}

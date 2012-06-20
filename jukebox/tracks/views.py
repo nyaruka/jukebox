@@ -19,10 +19,14 @@ class TrackCRUDL(SmartCRUDL):
 
         def pre_save(self, obj):
             obj = super(TrackCRUDL.Create, self).pre_save(obj)
-            track = Track.create_from_file(obj.mp3_file.file.temporary_file_path(),
-                                           obj.created_by)
-            track.mp3_file = obj.mp3_file
-            return track
+            obj.mp3_file.save(obj.mp3_file.name, obj.mp3_file.file, save=True)
+            obj.update_from_file(str(obj.mp3_file.file))
+            return obj
+
+        def post_save(self, obj):
+            obj = super(TrackCRUDL.Create, self).post_save(obj)
+            obj.album.update_album_art(str(obj.mp3_file.file))
+            return obj
 
     class List(SmartListView):
         fields = ('name', 'artist', 'length', 'genre', 'album', 'request')
