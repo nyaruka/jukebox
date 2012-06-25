@@ -3,17 +3,49 @@
 {% block content %}
 <div class="row">
   <div class="span14">
-    <h2>Welcome to RapidSMS.</h2>
+    <h1>Jukebox Player</h1>
   </div>
 </div>
+
 <div class="row">
+<table>
+<td>
   <div class="span7">
-    <h3>Success!</h3>
-    You have successfully set up RSMS. This sample configuration lets you see how a simple application works using localization for lanagues.  Click on "Console" to send some test messages.
+    <h2>Now Playing</h2>
+	{% for request in requests %} 
+	{% if request.status == "P" %}
+	<h1>{{request.track.name}}</h1>
+	<h2>{{request.track.album.artist.name}} - {{request.track.album.name}}</h2>
+
+	<img src="{{ MEDIA_URL }}{{ request.track.album.cover }}" width="400" border="2px"/>
+	{% endif %}
+
+	{% endfor %}
+	
+    <h2></h2>
   </div>
-  <div class="span7">
-    <h3>Customization</h3>
-    Once you have a feel for things, feel free to customize, this template is located in /templates/dashboard/index.html
-  </div>
+</td>
+<td valigh ="top">
+  
+    <h4>Next on the Playlist</h4>
+	<table>
+    {% for request in requests %} 
+	{% if request.status == "Q" %}
+	<tr>
+	<td>
+		<img src="{{ MEDIA_URL }}{{ request.track.album.cover }}" width="50"/>
+	</td>
+	<td >
+	<h3>{{request.track.name}}</h3>
+	<h5>{{request.track.album.artist.name}} - {{request.track.album.name}}</h5>
+	</td>
+	{% endif %}
+	</tr>
+	{% endfor %}
+	</table>
+  
+</td>
+</table>
 </div>
+
 {% endblock %}
