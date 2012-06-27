@@ -3,7 +3,13 @@ from .models import *
 
 class RequestCRUDL(SmartCRUDL):
     model = Request
-    actions = ('create', 'read', 'list', 'new')
+    actions = ('create', 'read', 'list', 'new','playing')
+
+    class Playing(SmartListView):
+        refresh = 1000
+
+        def get_queryset(self):
+            return Request.objects.filter(status__in= ["P","Q"]).order_by('created_on')
 
     class List(SmartListView):
         default_order = ('-created_on',)

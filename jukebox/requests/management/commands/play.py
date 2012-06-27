@@ -24,11 +24,14 @@ class Command(BaseCommand):
                     playlist = Request.objects.filter(status='Q').order_by('created_on')
                     for request in playlist:
                         request.status = 'P'
+                        request.played_on = datetime.datetime.now()
                         request.save()
 
                         try:
+                            
                             call(["mpg123", request.track.mp3_file.path])
-                        except:
+                            
+			except:
                             import traceback
                             traceback.print_exc()
                             sys.exit(1)

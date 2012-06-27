@@ -12,7 +12,11 @@ class ArtistCRUDL(SmartCRUDL):
 
 class TrackCRUDL(SmartCRUDL):
     model = Track
-    actions = ('create', 'list', 'read', 'update', 'delete')
+    actions = ('create', 'list', 'read', 'update', 'delete','playing')
+
+    class Playing(SmartListView):
+        refresh = 1000
+
 
     class Create(SmartCreateView):
         fields = ('mp3_file',)
