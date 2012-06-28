@@ -1,6 +1,6 @@
 from rapidsms.apps.base import AppBase
 from .models import *
-from nsms.text.models import gettext as _
+from nsms.text import gettext as _
 from nsms.parser import Parser, ParseException
 from rapidsms.models import Backend, Connection
 from django.utils import translation

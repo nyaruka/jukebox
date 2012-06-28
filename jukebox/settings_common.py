@@ -319,7 +319,7 @@ SOUTH_TESTS_MIGRATE = False
 #-----------------------------------------------------------------------------------
 
 RAPIDSMS_TABS = []
-SMS_APPS = [ 'mileage' ]
+SMS_APPS = [ 'requests' ]
 
 # change this to your specific backend for your install
 DEFAULT_BACKEND = "console"
