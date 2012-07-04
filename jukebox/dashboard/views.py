@@ -17,13 +17,6 @@ def index(request):
 	
         progress = None
 	for song in requests:
-<<<<<<< HEAD
-		if song.status == "P":
-			progressong = ((datetime.datetime.now() - song.played_on)*100 / song.track.length)
-			context = dict(requests = requests, progressong = progressong)
-		else:
-			context = dict(requests = requests)
-=======
                 if song.status == "P":
 			progress = ((datetime.datetime.now() - song.played_on)*100 / song.track.length)
 	context = dict(requests = requests, progress = progress)
