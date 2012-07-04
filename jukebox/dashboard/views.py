@@ -15,12 +15,19 @@ import datetime
 def index(request):
 	requests = Request.objects.all()
 	
+        progress = None
 	for song in requests:
+<<<<<<< HEAD
 		if song.status == "P":
 			progressong = ((datetime.datetime.now() - song.played_on)*100 / song.track.length)
 			context = dict(requests = requests, progressong = progressong)
 		else:
 			context = dict(requests = requests)
+=======
+                if song.status == "P":
+			progress = ((datetime.datetime.now() - song.played_on)*100 / song.track.length)
+	context = dict(requests = requests, progress = progress)
+>>>>>>> cca92e2969a0e478ad9fa7fdfa2a6d4eaaa7b7c5
 	return render_to_response('dashboard/index.html', context, context_instance=RequestContext(request))
 
 def status(request):
