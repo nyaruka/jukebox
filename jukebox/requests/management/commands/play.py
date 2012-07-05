@@ -48,7 +48,7 @@ class Command(BaseCommand):
                         Request.objects.create(track=randomlist[0],
                                            created_by=user,
                                            modified_by=user,
-                                           played_on =datetime.datetime.now())
+                                           played_on =None)
                         
                         
                        
