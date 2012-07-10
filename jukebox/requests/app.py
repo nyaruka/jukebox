@@ -43,10 +43,10 @@ class App(AppBase):
 
             if score == 1:
                 message.respond("Your positive vote has been recorded for %s" % track.name)
-                call(["mpg123", '/Users/nicp/nyaruka/jukebox/yay.mp3'])
+                call(["mpg123", '/home/precise/Projects/jukebox/jukebox/yay.mp3'])
             else:
                 message.respond("Your negative vote has been recorded for %s" % track.name)
-                call(["mpg123", '/Users/nicp/nyaruka/jukebox/boo.mp3'])
+                call(["mpg123", '/home/precise/Projects/jukebox/jukebox/boo.mp3'])
 
         else:
             matching = Track.objects.filter(album__artist__name__icontains=message.text).order_by('?')
