@@ -15,9 +15,6 @@ urlpatterns = patterns('',
 
     url('^tracks/', include('tracks.urls')),
     url('^playlists/', include('requests.urls')),
-	
-    # django-sentry for error logging
-    (r'^sentry/', include('sentry.web.urls')),
 )
 
 # site static for development

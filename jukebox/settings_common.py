@@ -149,7 +149,6 @@ INSTALLED_APPS = (
     'guardian',
 
     # error logging
-    'sentry',
     'raven.contrib.django',
 
     # versioning of our data
