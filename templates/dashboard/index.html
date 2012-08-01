@@ -12,44 +12,44 @@
 <td>
   <div class="span7">
     <h2>Now Playing</h2>
-	{% for request in requests %} 
-	{% if request.status == "P" %}
-	<h1>{{request.track.name}}</h1>
-	<h2>{{request.track.album.artist.name}} - {{request.track.album.name}}</h2>
+{% for request in requests %}
+{% if request.status == "P" %}
+<h1>{{request.track.name}}</h1>
+<h2>{{request.track.album.artist.name}} - {{request.track.album.name}}</h2>
 
-	<img src="{{ MEDIA_URL }}{{ request.track.album.cover }}" width="400" />
-	<div style="height: 10px"></div>
+<img src="{{ MEDIA_URL }}{{ request.track.album.cover }}" width="400" />
+<div style="height: 10px"></div>
 
-	<div class="progress progress-striped
-    active">
+<div class="progress progress-striped
+active">
     <div class="bar"
     style="width: {{progress}}%;"></div>
     </div>
-	{% endif %}
+{% endif %}
 
-	{% endfor %}
-	
+{% endfor %}
+
     <h2></h2>
   </div>
 </td>
 <td valigh ="top">
   
     <h4>Next on the Playlist</h4>
-	<table>
-    {% for request in requests %} 
-	{% if request.status == "Q" %}
-	<tr>
-	<td>
-		<img src="{{ MEDIA_URL }}{{ request.track.album.cover }}" width="50"/>
-	</td>
-	<td >
-	<h3>{{request.track.name}}</h3>
-	<h5>{{request.track.album.artist.name}} - {{request.track.album.name}}</h5>
-	</td>
-	{% endif %}
-	</tr>
-	{% endfor %}
-	</table>
+<table>
+    {% for request in requests %}
+{% if request.status == "Q" %}
+<tr>
+<td>
+<img src="{{ MEDIA_URL }}{{ request.track.album.cover }}" width="50"/>
+</td>
+<td >
+<h3>{{request.track.name}}</h3>
+<h5>{{request.track.album.artist.name}} - {{request.track.album.name}}</h5>
+</td>
+{% endif %}
+</tr>
+{% endfor %}
+</table>
   
 </td>
 </table>

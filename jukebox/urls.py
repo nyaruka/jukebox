@@ -10,7 +10,7 @@ urlpatterns = patterns('',
     url('', include('rapidsms_httprouter.urls')),
 
     # add your apps here
-    url('', include('dashboard.urls')),
+    url('', include('requests.urls')),
     url('^mileage/', include('mileage.urls')),
 
     url('^tracks/', include('tracks.urls')),

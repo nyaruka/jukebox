@@ -7,11 +7,12 @@ class RequestCRUDL(SmartCRUDL):
 
     class Playing(SmartListView):
         refresh = 1000
-
+        
         def get_queryset(self):
             return Request.objects.filter(status__in= ["P","Q"]).order_by('created_on')
 
     class List(SmartListView):
+        refresh = 30000
         default_order = ('-created_on',)
         fields = ('track', 'status', 'created_by', 'created_on')
         field_config = { 'track': dict(label="Song"),
