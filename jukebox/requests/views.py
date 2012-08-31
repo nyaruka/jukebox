@@ -7,6 +7,7 @@ class RequestCRUDL(SmartCRUDL):
 
     class Playing(SmartListView):
         refresh = 1000
+        permission = None
         
         def get_queryset(self):
             return Request.objects.filter(status__in= ["P","Q"]).order_by('created_on')
