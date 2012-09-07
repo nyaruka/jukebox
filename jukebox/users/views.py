@@ -1,6 +1,7 @@
 from smartmin.views import *
 
 class UserCRUDL(smartmin.users.UserCRUDL):
+     action
      class Register(SmartCreateView):
         form_class = UserForm
         permission = None

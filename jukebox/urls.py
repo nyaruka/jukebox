@@ -4,7 +4,7 @@ from rapidsms_httprouter.views import console
 from django.conf import settings
 
 urlpatterns = patterns('',
-    url(r'^users/', include('smartmin.users.urls')),
+    url(r'^users/', include('users.urls')),
     url(r'^text/', include('nsms.text.urls')),
     url('^console/', include('nsms.console.urls')),
     url('', include('rapidsms_httprouter.urls')),

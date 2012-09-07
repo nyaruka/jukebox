@@ -190,6 +190,8 @@ INSTALLED_APPS = (
 
     # requests
     'requests',
+
+    'users',
 )
 
 # A sample logging configuration. The only tangible logging
