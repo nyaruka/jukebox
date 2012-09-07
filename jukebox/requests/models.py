@@ -15,12 +15,18 @@ class Request(SmartModel):
     played_on = models.DateTimeField(null=True, blank=True)
 
     def get_progress(self):
-        progress = (self.get_elapsed()*100 /self.track.length)
+        if self.status == "P":
+            progress = (self.get_elapsed()*100 /self.track.length)
+        else:
+            progress = 0
         return progress
 
     def get_elapsed(self):
-         diff = (datetime.datetime.now()- self.played_on).total_seconds()
-         return diff
+        if self.status == "P":
+            diff = (datetime.datetime.now()- self.played_on).total_seconds()
+        else:
+            diff = 0
+        return diff
 
     def __unicode__(self):
 	return "[%s] %s" % (self.status, self.track.name)
@@ -33,4 +39,4 @@ class Vote(SmartModel):
                               help_text="The track being voted on")
     score = models.IntegerField(help_text="The score attributed to this vote")
 
-    
+

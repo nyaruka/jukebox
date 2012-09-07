@@ -12,10 +12,10 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'jukebox.db',                      # Or path to database file if using sqlite3.
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+        'NAME': 'jukebox',                      # Or path to database file if using sqlite3.
+        'USER': 'jukebox',                      # Not used with sqlite3.
+        'PASSWORD': 'jukebox',                  # Not used with sqlite3.
+        'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
@@ -174,7 +174,7 @@ INSTALLED_APPS = (
     'django_quickblocks',
 
     # async tasks,
-    'djcelery',
+    #'djcelery',
 
     # user management
     'smartmin.users',
@@ -190,6 +190,8 @@ INSTALLED_APPS = (
 
     # requests
     'requests',
+
+    'users',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -259,7 +261,8 @@ PERMISSIONS = {
           'read',   # can read an object, viewing it's details
           'update', # can update an object
           'delete', # can delete an object,
-          'list'),  # can view a list of the objects
+          'list',# can view a list of the objects
+          'new'),  
     # Add new object level permissions here:
     # 'subjects.subject': ('csv', 'delivered', 'stopped'),
 }
@@ -269,9 +272,21 @@ GROUP_PERMISSIONS = {
     "Administrators": (
         'auth.user.*', 
         'rapidsms_httprouter.message.*',
+        'requests.request.*',
+        'tracks.artist.*',
+        'tracks.track.*',
+        'tracks.album.*',
+        'tracks.genre.*',
+        
     ),
     "Editors": [],
-    "Viewers": []
+    "Viewers": (
+        'requests.request.*',
+        'tracks.artist.*',
+        'tracks.track.*',
+        'tracks.album.*',
+        'tracks.genre.*',
+        ),
 }
 
 #-----------------------------------------------------------------------------------
@@ -296,8 +311,8 @@ ANONYMOUS_USER_ID = -1
 # Async tasks with django-celery
 #-----------------------------------------------------------------------------------
 
-import djcelery
-djcelery.setup_loader()
+#import djcelery
+#djcelery.setup_loader()
 
 CELERY_RESULT_BACKEND = 'database'
 

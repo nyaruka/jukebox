@@ -20,6 +20,7 @@ def index(request):
                 if song.status == "P":
 			progress = ((datetime.datetime.now() - song.played_on)*100 / song.track.length)
 	context = dict(requests = requests, progress = progress)
+
 	return render_to_response('dashboard/index.html', context, context_instance=RequestContext(request))
 
 def status(request):

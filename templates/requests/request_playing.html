@@ -5,23 +5,23 @@
 {% block pjax %}
 
 <div id="pjax">
-<table>
+
 
 
 {% for req  in  object_list %}
+
 {% if forloop.first %}
-<tr>
+
 
   <h2>Now Playing</h2>
   <h1>{{req.track.name}}</h1>
   <h2>{{req.track.album.artist.name}} - {{req.track.album.name}}</h2>
   <img src="{{ MEDIA_URL }}{{ req.track.album.cover }}" width="400" />
   <div style="height: 10px"></div>
-  <div class="progress progress-striped active" style="width: 400px">
+    <div class="progress progress-striped active" style="width: 400px" >
     <div class="bar" style="width:{{req.get_progress}}%;"></div>
   </div>
-  
-
+  <div style="width: 1000px" >
   <table align="left" width="400px">
     <tr>
       <td align="left">
@@ -31,29 +31,23 @@
 	{{req.track.length}}
       </td>
     </tr>
- 
-  <h2></h2>
-
+  </table>
+  </div></br>
 
 {% else %}
-
-<tr>
- 
-    <td>
+<div style="width: 1000px">  
       <img src="{{ MEDIA_URL }}{{ req.track.album.cover }}" width="50"/>
-    </td>
-    <td >
+        
       <h3>{{req.track.name}}</h3>
       <h5>{{req.track.album.artist.name}} - {{req.track.album.name}}</h5>
-    </td>
-  
-</tr>
+</div>
+
 {% endif %}
-</tr>
+
 
 {% endfor %}
 
- </table>
+ 
 </div>
 
 {% endblock pjax %}

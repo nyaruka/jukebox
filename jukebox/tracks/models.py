@@ -37,6 +37,22 @@ class Album(SmartModel):
             self.save()
             
             os.unlink(tmp_name)
+        else:
+            tmp_name = mktemp()
+            tmp_file = open(tmp_name, 'wb')
+            default_cover = open("jukebox.png",'r')
+            tmp_file.write(default_cover.read())
+            tmp_file.close()
+
+            tmp_file = open(tmp_name, 'r')
+            self.cover.save('%s.jpg' % self.name, File(tmp_file), save=True)
+            self.save()
+            
+            os.unlink(tmp_name)
+            
+                       
+            
+            
 
     def __unicode__(self):
         return self.name
