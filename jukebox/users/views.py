@@ -1,7 +1,12 @@
+from django.contrib.auth.models import User, Group
+from django import forms
 from smartmin.views import *
+from smartmin.users.views import *
 
-class UserCRUDL(smartmin.users.UserCRUDL):
-     action
+class UserCRUDL(UserCRUDL):
+     actions = ('create','update','list', 'register')
+
+
      class Register(SmartCreateView):
         form_class = UserForm
         permission = None
