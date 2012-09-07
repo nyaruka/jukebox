@@ -11,11 +11,11 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'jukebox.db',                      # Or path to database file if using sqlite3.
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'jukebox',                      # Or path to database file if using sqlite3.
+        'USER': 'jukebox',                      # Not used with sqlite3.
+        'PASSWORD': 'jukebox',                  # Not used with sqlite3.
+        'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
@@ -174,7 +174,7 @@ INSTALLED_APPS = (
     'django_quickblocks',
 
     # async tasks,
-    'djcelery',
+    #'djcelery',
 
     # user management
     'smartmin.users',
@@ -296,8 +296,8 @@ ANONYMOUS_USER_ID = -1
 # Async tasks with django-celery
 #-----------------------------------------------------------------------------------
 
-import djcelery
-djcelery.setup_loader()
+#import djcelery
+#djcelery.setup_loader()
 
 CELERY_RESULT_BACKEND = 'database'
 
