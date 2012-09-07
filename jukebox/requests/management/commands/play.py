@@ -45,7 +45,7 @@ class Command(BaseCommand):
                     
                     if not playlist:
                         #for the bug of tracks stucking on the playing status because of an unxpected system halt 
-                        request_completed = Request.objects.filter(status='P')
+                        request_completed = Request.objects.filter(status='P').order_by('created_on')
                         if request_completed[1:]:
                             for req in request_completed[1:]:
                                 req.status = 'C'
