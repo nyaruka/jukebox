@@ -46,8 +46,8 @@ class Command(BaseCommand):
                     if not playlist:
                         #for the bug of tracks stucking on the playing status because of an unxpected system halt 
                         request_completed = Request.objects.filter(status='P')
-                        if request_completed:
-                            for req in request_completed:
+                        if request_completed[1:]:
+                            for req in request_completed[1:]:
                                 req.status = 'C'
                                 req.save()
                         #generate a random track request while no more request to play   
