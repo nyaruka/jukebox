@@ -39,4 +39,4 @@ class Vote(SmartModel):
                               help_text="The track being voted on")
     score = models.IntegerField(help_text="The score attributed to this vote")
 
-    
+

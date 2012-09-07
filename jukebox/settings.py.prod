@@ -1,7 +1,7 @@
 # import our default settings
 from settings_common import *
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 # these guys will get email from sentry
@@ -28,11 +28,11 @@ STATICFILES_FINDERS = (
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'dbname',
-        'USER': 'dbuser',
-        'PASSWORD': 'dbpassword',
-        'HOST': 'dbhost',
-        'PORT': '', 
+        'NAME': 'jukebox',                      # Or path to database file if using sqlite3.
+        'USER': 'jukebox',                      # Not used with sqlite3.
+        'PASSWORD': 'jukebox',                  # Not used with sqlite3.
+        'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
         'OPTIONS': {
                "init_command": "SET storage_engine=INNODB",
                "charset": "utf8", 

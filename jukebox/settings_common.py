@@ -11,7 +11,7 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'jukebox',                      # Or path to database file if using sqlite3.
         'USER': 'jukebox',                      # Not used with sqlite3.
         'PASSWORD': 'jukebox',                  # Not used with sqlite3.
@@ -259,7 +259,8 @@ PERMISSIONS = {
           'read',   # can read an object, viewing it's details
           'update', # can update an object
           'delete', # can delete an object,
-          'list'),  # can view a list of the objects
+          'list',# can view a list of the objects
+          'new'),  
     # Add new object level permissions here:
     # 'subjects.subject': ('csv', 'delivered', 'stopped'),
 }
@@ -269,9 +270,21 @@ GROUP_PERMISSIONS = {
     "Administrators": (
         'auth.user.*', 
         'rapidsms_httprouter.message.*',
+        'requests.request.*',
+        'tracks.artist.*',
+        'tracks.track.*',
+        'tracks.album.*',
+        'tracks.genre.*',
+        
     ),
     "Editors": [],
-    "Viewers": []
+    "Viewers": (
+        'requests.request.*',
+        'tracks.artist.*',
+        'tracks.track.*',
+        'tracks.album.*',
+        'tracks.genre.*',
+        ),
 }
 
 #-----------------------------------------------------------------------------------

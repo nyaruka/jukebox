@@ -1,0 +1,41 @@
+{% extends "base.html" %} 
+{% load smartmin %} 
+
+{% block login %}
+{% if not  request.user.is_authenticated %} 
+<li class="pull-right"><a href="{% url users.user_register %}">Register</a></li>{% endif %}
+{% endblock %} 
+
+
+{% block content %}
+<div class="row">
+  <div class="span6 offset4">
+    <div class="page-header"><h3>Login in</h3></div>
+    
+    <form method="post" class="form-stacked" id="login-form">
+      {% for field, errors in form.errors.items %}
+      {% if field == '__all__' %}
+      <div class="alert-message error form-errors">
+        {{ errors }}
+      </div>
+      {% endif %}
+      {% endfor %}
+      
+      <fieldset>
+        {% for field in form %}
+        <div class="clearfix {% if field.error %}error{% endif %}">
+          <label for="{{ field.name }}">{{ field.label }}</label>
+          <div class="input">{{ field }}</div>
+          {% if field.error %}
+          <span class="help-inline">{{ field.error }}</span>
+          {% endif %}
+        </div>
+        {% endfor %}
+        {% csrf_token %}
+        <input type="submit" class="btn primary" value="Login">
+      </fieldset>
+    </form>
+  </div>
+
+</div>
+{% endblock %}
