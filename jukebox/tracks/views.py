@@ -77,6 +77,3 @@ class GenreCRUDL(SmartCRUDL):
     class List(SmartListView):
         fields = ('name',)
 
-
-
-
