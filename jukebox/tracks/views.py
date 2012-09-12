@@ -33,7 +33,7 @@ class TrackCRUDL(SmartCRUDL):
             return obj
 
     class List(SmartListView):
-        fields = ('name', 'artist', 'length', 'genre', 'album', 'request')
+        fields = ('name', 'artist', 'length', 'genre', 'album', 'request','created_on')
         search_fields = ('name__icontains', 'album__artist__name__icontains')
         default_order = ('-created_on',)
 
