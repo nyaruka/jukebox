@@ -36,6 +36,11 @@ class TrackCRUDL(SmartCRUDL):
         fields = ('name', 'artist', 'length', 'genre', 'album', 'request')
         search_fields = ('name__icontains', 'album__artist__name__icontains')
 
+        def derive_queryset(self, **kwargs):
+            queryset = super(TrackCRUDL.List, self).derive_queryset(**kwargs)
+            return queryset.filter(is_active=True).exclude(name="")
+
+
         def get_request(self, obj):
             return '<a class="btn posterize" href="%s?track=%d">Request</a>' % (reverse('requests.request_new'), obj.id)
 

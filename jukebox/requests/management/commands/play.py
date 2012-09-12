@@ -46,7 +46,7 @@ class Command(BaseCommand):
                     if not playlist:
 
                         #generate a random track request while no more request to play   
-                        randomlist = tracklib.order_by('?')
+                        randomlist = tracklib.filter(is_active=True).exclude(name="").order_by('?')
                         Request.objects.create(track=randomlist[0],
                                            created_by=user,
                                            modified_by=user,
@@ -56,7 +56,7 @@ class Command(BaseCommand):
                         request_completed = Request.objects.filter(status='P').order_by('created_on')
                         if request_completed:
                             for req in request_completed:
-                                if datetime.datetime.now() - req.played_on > req.track.length:
+                                if (datetime.datetime.now() - req.played_on).seconds > req.track.length or req.track.length==None:
                                     req.status = 'C'
                                     req.save()
                        

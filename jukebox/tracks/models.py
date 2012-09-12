@@ -40,7 +40,7 @@ class Album(SmartModel):
         else:
             tmp_name = mktemp()
             tmp_file = open(tmp_name, 'wb')
-            default_cover = open("jukebox.png",'r')
+            default_cover = open("/home/jukebox/jukebox/jukebox.png",'r')
             tmp_file.write(default_cover.read())
             tmp_file.close()
 
