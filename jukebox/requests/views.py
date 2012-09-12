@@ -3,7 +3,7 @@ from .models import *
 
 class RequestCRUDL(SmartCRUDL):
     model = Request
-    actions = ('create', 'read', 'list', 'new','playing')
+    actions = ('read', 'list', 'new','playing')
 
     class Playing(SmartListView):
         refresh = 1000
