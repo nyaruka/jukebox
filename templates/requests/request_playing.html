@@ -6,7 +6,31 @@
 {% endblock %}
 
 {% block content %}
-
+  <div style="width:500px;margin:50px">
+    <h2>Welcome to Jukebox Web Interface</h2>
+    </br>
+    <a class="btn btn-large btn-block" href="{% url users.user_login %}">Login </a> 
+</br>
+</br>
+to
+</br>
+</br>
+<a class="btn btn-large btn-block" href="{% url tracks.track_list %}">Browse tracks to request a song</a>  or  <a class="btn btn-large btn-block" href="{% url tracks.track_create %}"> Upload a track to jukebox </a> 
+</br>
+</br>
+</br>
+    
+<h3>You can also use sms to <em style="font-size:1.4em">0788 047 455</em>:</h3>
+    
+      <ul>
+	<li>Request a song by sending <em style="font-size:1.4em">a title or artiste name</em></li>
+	<li>Upvote on the palying song by sending the word <em style="font-size:1.4em">yay</em></li>
+	<li>Downvote on the playing song by sening the word <em style="font-size:1.4em" >boo</em>
+      </ul>
+    
+</br>
+      
+  </div>
 
 {% block pjax %}
 
@@ -51,6 +75,7 @@
   
   
   {% endfor %}
+
 
   
 </div>
