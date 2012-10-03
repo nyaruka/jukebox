@@ -2,24 +2,16 @@
 
 
 {% block pre-content %}
- <div class="page-header"><h2>Playlist</h2></div> 
-{% endblock %}
-
-{% block content %}
-  <div style="width:500px;margin:50px">
+ <div style="width:500px;margin:50px">
     <h2>Welcome to Jukebox Web Interface</h2>
     </br>
-    <a class="btn btn-large btn-block" href="{% url users.user_login %}">Login </a> 
 </br>
 </br>
-to
-</br>
-</br>
-<a class="btn btn-large btn-block" href="{% url tracks.track_list %}">Browse tracks to request a song</a>  or  <a class="btn btn-large btn-block" href="{% url tracks.track_create %}"> Upload a track to jukebox </a> 
+<a class="btn btn-large btn-block btn-primary" href="{% url tracks.track_list %}">Browse tracks to request a song</a>  |  <a class="btn btn-large btn-block btn-primary" href="{% url tracks.track_create %}"> Upload a track to jukebox </a> 
 </br>
 </br>
 </br>
-    
+   
 <h3>You can also use sms to <em style="font-size:1.4em">0788 047 455</em>:</h3>
     
       <ul>
@@ -31,6 +23,11 @@ to
 </br>
       
   </div>
+ <div class="page-header"><h2>Playlist</h2></div> 
+{% endblock %}
+
+{% block content %}
+ 
 
 {% block pjax %}
 
@@ -54,10 +51,10 @@ to
     <div style="width: 400px" >
       
       <span  >
-	{{req.get_elapsed}}
+	{{req.get_formatted_elapsed}}
       </span>
       <span style="float:right">
-	{{req.track.length}}
+	{{req.track.get_length}}
       </span>
       
     </div>
