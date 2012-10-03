@@ -2,6 +2,7 @@ from django.db import models
 from smartmin.models import SmartModel
 from tracks.models import *
 import datetime
+import time
 
 class Request(SmartModel):
     STATUS_CHOICES = (('Q', "Queued"),
@@ -20,6 +21,10 @@ class Request(SmartModel):
         else:
             progress = 0
         return progress
+
+    def get_formatted_elapsed(self):
+        
+        return time.strftime('%M:%S',time.gmtime(self.get_elapsed()))
 
     def get_elapsed(self):
         if self.status == "P":

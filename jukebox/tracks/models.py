@@ -5,6 +5,7 @@ import mutagen
 from tempfile import mktemp
 import os
 from django.core.files import File
+import time
 
 class Artist(SmartModel):
     name = models.CharField(max_length=64, unique=True,
@@ -117,6 +118,8 @@ class Track(SmartModel):
 
         return self
 
+    def get_length(self):
+        return time.strftime('%M:%S', time.gmtime(self.length))
 
     def __unicode__(self):
         return self.name
