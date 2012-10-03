@@ -25,6 +25,7 @@ active">
     <div class="bar"
     style="width: {{progress}}%;"></div>
     </div>
+<div style="clear: both;"></div>
 {% endif %}
 
 {% endfor %}
@@ -38,7 +39,7 @@ active">
 <table>
     {% for request in requests %}
 {% if request.status == "Q" %}
-<tr>
+<tr align="left">
 <td>
 <img src="{{ MEDIA_URL }}{{ request.track.album.cover }}" width="50"/>
 </td>

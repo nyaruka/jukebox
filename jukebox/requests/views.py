@@ -3,10 +3,10 @@ from .models import *
 
 class RequestCRUDL(SmartCRUDL):
     model = Request
-    actions = ('create', 'read', 'list', 'new','playing')
+    actions = ('read', 'list', 'new','playing')
 
     class Playing(SmartListView):
-        refresh = 1000
+        #refresh = 1000
         permission = None
         
         def get_queryset(self):

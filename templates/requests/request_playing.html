@@ -1,53 +1,83 @@
 {% extends "smartmin/list.html" %}
 
+
+{% block pre-content %}
+ <div class="page-header"><h2>Playlist</h2></div> 
+{% endblock %}
+
 {% block content %}
+  <div style="width:500px;margin:50px">
+    <h2>Welcome to Jukebox Web Interface</h2>
+    </br>
+    <a class="btn btn-large btn-block" href="{% url users.user_login %}">Login </a> 
+</br>
+</br>
+to
+</br>
+</br>
+<a class="btn btn-large btn-block" href="{% url tracks.track_list %}">Browse tracks to request a song</a>  or  <a class="btn btn-large btn-block" href="{% url tracks.track_create %}"> Upload a track to jukebox </a> 
+</br>
+</br>
+</br>
+    
+<h3>You can also use sms to <em style="font-size:1.4em">0788 047 455</em>:</h3>
+    
+      <ul>
+	<li>Request a song by sending <em style="font-size:1.4em">a title or artiste name</em></li>
+	<li>Upvote on the palying song by sending the word <em style="font-size:1.4em">yay</em></li>
+	<li>Downvote on the playing song by sening the word <em style="font-size:1.4em" >boo</em>
+      </ul>
+    
+</br>
+      
+  </div>
 
 {% block pjax %}
 
-<div id="pjax">
+<div id="pjax" class="container" >
 
 
 
-{% for req  in  object_list %}
+  {% for req  in  object_list %}
 
-{% if forloop.first %}
-
-
-  <h2>Now Playing</h2>
-  <h1>{{req.track.name}}</h1>
-  <h2>{{req.track.album.artist.name}} - {{req.track.album.name}}</h2>
-  <img src="{{ MEDIA_URL }}{{ req.track.album.cover }}" width="400" />
-  <div style="height: 10px"></div>
+  {% if forloop.first %}
+  <div style="width:550px;float:right">
+    
+    <div>Now Playing</div>
+    <div>{{req.track.name}}</div>
+    <div>{{req.track.album.artist.name}} - {{req.track.album.name}}</div>
+    <img src="{{ MEDIA_URL }}{{ req.track.album.cover }}" width="400" />
+    <div style="height: 10px"></div>
     <div class="progress progress-striped active" style="width: 400px" >
-    <div class="bar" style="width:{{req.get_progress}}%;"></div>
-  </div>
-  <div style="width: 1000px" >
-  <table align="left" width="400px">
-    <tr>
-      <td align="left">
+      <div class="bar" style="width:{{req.get_progress}}%;"></div>
+    </div>
+    <div style="width: 400px" >
+      
+      <span  >
 	{{req.get_elapsed}}
-      </td>
-      <td align="right">
+      </span>
+      <span style="float:right">
 	{{req.track.length}}
-      </td>
-    </tr>
-  </table>
-  </div></br>
-
-{% else %}
-<div style="width: 1000px">  
-      <img src="{{ MEDIA_URL }}{{ req.track.album.cover }}" width="50"/>
-        
-      <h3>{{req.track.name}}</h3>
-      <h5>{{req.track.album.artist.name}} - {{req.track.album.name}}</h5>
-</div>
-
-{% endif %}
-
-
-{% endfor %}
-
+      </span>
+      
+    </div>
+  </div>
+  {% else %}
+  <div style="width: 500px">  
+    <img src="{{ MEDIA_URL }}{{ req.track.album.cover }}" width="50"/>
+    
+    <span>{{req.track.name}}</span></br>
+    <span>{{req.track.album.artist.name}} - {{req.track.album.name}}</span>
+    <hr>
+  </div>
  
+  {% endif %}
+  
+  
+  {% endfor %}
+
+
+  
 </div>
 
 {% endblock pjax %}
