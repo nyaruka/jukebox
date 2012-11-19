@@ -60,7 +60,7 @@ class Command(BaseCommand):
 
                         randomlist = requests.order_by('?')
                         if randomlist:
-                            Request.objects.create(track=randomlist[0],
+                            Request.objects.create(track=randomlist[0].track,
                                            created_by=user,
                                            modified_by=user,
                                            played_on =None)
