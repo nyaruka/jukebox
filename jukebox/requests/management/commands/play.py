@@ -55,7 +55,7 @@ class Command(BaseCommand):
                         requests = requests.exclude(track_id__in=[t.id for t in Vote.objects.filter(score=-1)])
 
                         # exclude anything that has been played recently
-                        repeat_window = datetime.timedelta(hours=1)
+                        repeat_window = datetime.timedelta(hours=6)
                         requests = requests.exclude(created_on__gt=datetime.datetime.now() - repeat_window)
 
                         randomlist = requests.order_by('?')
