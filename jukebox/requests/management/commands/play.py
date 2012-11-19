@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
 import datetime
 from optparse import make_option
-from requests.models import Request
+from requests.models import Request, Vote
 from tracks.models import Track
 from subprocess import call
 import sys
@@ -46,8 +46,21 @@ class Command(BaseCommand):
                     if not playlist:
 
                         #generate a random track request while no more request to play   
-                        randomlist = tracklib.order_by('?')
-                        Request.objects.create(track=randomlist[0],
+                        # select t.name, count(*) as 'requests', track_id from requests_request, tracks_track t where t.id = requests_request.track_id and requests_request.created_by_id != -1 group by track_id order by requests;
+
+                        # find all songs that have been requested by real users
+                        requests = Request.objects.exclude(created_by_id=-1)
+
+                        # now exclude any song that has ever been voted down
+                        requests = requests.exclude(track_id__in=[t.id for t in Vote.objects.filter(score=-1)])
+
+                        # exclude anything that has been played recently
+                        repeat_window = datetime.timedelta(hours=1)
+                        requests = requests.exclude(created_on__gt=datetime.datetime.now() - repeat_window)
+
+                        randomlist = requests.order_by('?')
+                        if randomlist:
+                            Request.objects.create(track=randomlist[0],
                                            created_by=user,
                                            modified_by=user,
                                            played_on =None)
