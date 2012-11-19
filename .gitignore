@@ -17,3 +17,6 @@ media/
 moveit/nsms
 moveit/settings.py
 config/
+*.log
+sitestatic/*
+supervisor.conf
