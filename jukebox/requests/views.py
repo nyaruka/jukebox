@@ -3,7 +3,7 @@ from .models import *
 
 class RequestCRUDL(SmartCRUDL):
     model = Request
-    actions = ('read', 'list', 'new','playing')
+    actions = ('read', 'list', 'new','playing', 'radio')
 
     class Playing(SmartListView):
         refresh = 1000
@@ -26,3 +26,6 @@ class RequestCRUDL(SmartCRUDL):
         fields = ('track',)
         success_url = '@requests.request_list'
 
+    class Radio(SmartListView):
+        def get_queryset(self, **kwargs):
+            return Request.objects.filter(created_by=self.request.user).values('track__album__artist__name', 'track__name', 'track__mp3_file').distinct().order_by('?')[:10]

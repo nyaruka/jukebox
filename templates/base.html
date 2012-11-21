@@ -22,6 +22,9 @@
   <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap.css">
   <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/smartmin_styles.css">
   <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/styles.css">
+
+  <link href="{{ STATIC_URL }}css/skin/blue.monday/jplayer.blue.monday.css" rel="stylesheet" type="text/css" />
+
   {% block extra-style %}{% endblock %}
 
   {# endcompress #}
@@ -143,6 +146,12 @@
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.pjax.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/scripts.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.jplayer.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/jplayer.playlist.min.js"></script>
+
+
+<!-- That´s it -->
 
 {# media associated with any form we are displaying #}
 {% if form %}
