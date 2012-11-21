@@ -264,7 +264,7 @@ PERMISSIONS = {
           'list',# can view a list of the objects
           'new'),  
     # Add new object level permissions here:
-    # 'subjects.subject': ('csv', 'delivered', 'stopped'),
+    'requests.request': ('radio',)
 }
 
 # assigns the permissions that each group should have
