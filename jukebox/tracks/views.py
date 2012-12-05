@@ -9,6 +9,11 @@ class ArtistCRUDL(SmartCRUDL):
         fields = ('name', 'created_on')
         search_fields = ('name__icontains',)
 
+        def get_queryset(self, **kwargs):
+            qs = super(ArtistCRUDL.List, self).get_queryset(**kwargs)
+            return qs
+
+
 
 class TrackCRUDL(SmartCRUDL):
     model = Track
