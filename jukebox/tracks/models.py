@@ -6,6 +6,7 @@ from tempfile import mktemp
 import os
 from django.core.files import File
 import time
+import re
 
 class Artist(SmartModel):
     name = models.CharField(max_length=64, unique=True,
@@ -103,9 +104,17 @@ class Track(SmartModel):
 
         albums = Album.objects.filter(name__iexact=audio['album'][0])
         if not albums:
+            year = audio.get('date', None)
+            if year:
+                match = re.search('(\d\d\d\d)', year[0])
+                if match:
+                    year = match.group(1)
+                else:
+                    year = None
+
             album = Album.objects.create(name=audio['album'][0],
                                          artist=artist,
-                                         year=audio.get('date', [None])[0],
+                                         year=year,
                                          created_by=user,
                                          modified_by=user)
         else:
