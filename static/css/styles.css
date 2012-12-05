@@ -1,4 +1,18 @@
 
+html, body {
+    background-color: #fff;
+}
+
+.page-header h2 {
+    font-weight: 100;
+    font-size:48px;
+    padding-bottom: 20px;
+    padding-top:40px;
+}
+
+.content {
+    -webkit-box-shadow:none;
+}
 
 
 
@@ -7,6 +21,7 @@
     height: 16px;
     width: 100px;
     float: right;
+    background-color: #fff;
 }
 
 footer {

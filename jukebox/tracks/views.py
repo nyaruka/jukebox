@@ -37,6 +37,9 @@ class TrackCRUDL(SmartCRUDL):
         search_fields = ('name__icontains', 'album__artist__name__icontains')
         default_order = ('-created_on',)
 
+        def lookup_field_link(self, context, field, obj):
+            return reverse("tracks.artist_read", args=[obj.album.artist.id])
+
         def derive_queryset(self, **kwargs):
             queryset = super(TrackCRUDL.List, self).derive_queryset(**kwargs)
             return queryset.filter(is_active=True).exclude(name="")

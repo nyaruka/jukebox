@@ -2,10 +2,6 @@
 
 {% load thumbnail %}
 
-
-{% block title %}
-    asdf
-{% endblock title %}
 {% block content %}
 
     {% for album in object.albums.all %}
@@ -38,12 +34,6 @@
 {% block extra-style %}
 <style>
 
-  .page-header h2 {
-      font-weight: 100;
-      font-size:48px;
-      padding-bottom: 20px;
-      padding-top:40px;
-  }
   .album-container {
       margin-bottom: 30px;
   }
