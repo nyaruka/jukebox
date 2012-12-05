@@ -7,6 +7,9 @@ import os
 from django.core.files import File
 import time
 import re
+from urllib2 import urlopen
+from urllib import quote_plus
+from time import sleep
 
 class Artist(SmartModel):
     name = models.CharField(max_length=64, unique=True,
@@ -25,6 +28,58 @@ class Album(SmartModel):
     cover = models.ImageField(upload_to="covers", null=True, blank=True,
                               help_text="The cover art if there is one")
 
+    def fetch_image_url(self, query_string):
+        got_result = False
+        tries = 0
+        
+        while tries < 3:
+            try:
+                url = "http://www.albumart.org/index.php?skey=" + quote_plus(query_string) + "&itempage=1&newsearch=1&searchindex=Music"
+                print "fetching: %s" % url
+                content = urlopen(url).read()
+                match = re.search('.*href="(.*?)" title="View larger image"', content)
+                if match: 
+                    return match.group(1)
+                else:
+                    return None
+            except:
+                sleep(10)
+
+    def find_album_art(self, track_name):
+        album_name = re.sub('([^a-zA-Z0-9])', ' ', self.name)
+        album_name = re.sub('( +)', ' ', album_name)
+
+        artist_name = re.sub('([^a-zA-Z0-9])', ' ', self.artist.name)
+        artist_name = re.sub('( +)', ' ', artist_name)
+
+        search_string = album_name + " " + artist_name
+        image_url = self.fetch_image_url(search_string)
+
+        if not image_url:
+            image_url = self.fetch_image_url(album_name)
+
+        if not image_url:
+            image_url = self.fetch_image_url(artist_name)
+
+        # found a match, woo!
+        if image_url:
+            print "found match: %s" % image_url
+
+            image = urlopen(image_url)
+
+            tmp_name = mktemp()
+            tmp_file = open(tmp_name, 'wb')
+            tmp_file.write(image.read())
+            tmp_file.close()
+
+            tmp_file = open(tmp_name, 'r')
+            self.cover.save('%s.jpg' % self.name, File(tmp_file), save=True)
+            self.save()
+            
+            os.unlink(tmp_name)
+        else:
+            print "No image found"
+            
     def update_album_art(self, mp3_file):
         mp3_data = MP3(mp3_file)
 
@@ -39,22 +94,6 @@ class Album(SmartModel):
             self.save()
             
             os.unlink(tmp_name)
-        else:
-            tmp_name = mktemp()
-            tmp_file = open(tmp_name, 'wb')
-            default_cover = open("/home/jukebox/jukebox/jukebox.png",'r')
-            tmp_file.write(default_cover.read())
-            tmp_file.close()
-
-            tmp_file = open(tmp_name, 'r')
-            self.cover.save('%s.jpg' % self.name, File(tmp_file), save=True)
-            self.save()
-            
-            os.unlink(tmp_name)
-            
-                       
-            
-            
 
     def __unicode__(self):
         return self.name

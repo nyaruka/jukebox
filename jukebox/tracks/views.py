@@ -9,14 +9,12 @@ class ArtistCRUDL(SmartCRUDL):
         fields = ('name', 'created_on')
         search_fields = ('name__icontains',)
 
-
 class TrackCRUDL(SmartCRUDL):
     model = Track
     actions = ('create', 'list', 'read', 'update', 'delete','playing')
 
     class Playing(SmartListView):
         refresh = 1000
-
 
     class Create(SmartCreateView):
         fields = ('mp3_file',)
@@ -67,10 +65,18 @@ class TrackCRUDL(SmartCRUDL):
 
 class AlbumCRUDL(SmartCRUDL):
     model = Album
-    actions = ('list', 'read', 'update')
+    actions = ('list', 'read', 'update', 'recover')
 
     class List(SmartListView):
         fields = ('name', 'artist', 'year')
+
+    class Recover(SmartReadView):
+        template_name = 'tracks/album_read.html'
+
+        def get_context_data(self, *args, **kwargs):
+            context = super(AlbumCRUDL.Recover, self).get_context_data(*args, **kwargs)
+            self.object.find_album_art()
+            return context
 
 
 class GenreCRUDL(SmartCRUDL):
