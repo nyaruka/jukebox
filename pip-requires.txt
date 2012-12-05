@@ -4,7 +4,7 @@ Markdown==2.0.3
 PIL==1.1.7
 PyRSS2Gen==1.0.0
 RapidSMS==0.9.6a
-South==0.7.3
+South
 anyjson==0.3.3
 coverage==3.5.1
 cssutils==0.9.10b1
@@ -14,7 +14,7 @@ django-compressor==1.1
 django-crispy-forms==1.1.4
 django-debug-toolbar==0.9.4
 django-digest==1.13
-django-guardian==1.0.3
+django-guardian
 django-indexer==0.3.0
 -e git+https://github.com/nyaruka/django-modeltranslation.git@dffebc9363297d77d91c99d46e8e53b32dc05e61#egg=django_modeltranslation-dev
 django-nose==0.1.3
