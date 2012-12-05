@@ -9,11 +9,18 @@
             {% for r in object_list %}
                 <div class="row playlist-item">
 
-                    <div class="now-playing">
                     {% if r.status == 'P' %}
-                        <img src="{{ STATIC_URL }}img/now_playing_normal.gif"/>
+                        <hr/>
+                        <div class="track-cover">
+                            {% if r.status == 'P' %}
+                                {% thumbnail r.track.album.cover "350" crop="center" as im %}
+                                    <img src="{{ im.url }}" width="100%"/>
+                                {% endthumbnail %}
+                            {% endif %}
+                        </div>
                     {% endif %}
-                    </div>
+
+
                         <div class="track-name">
                             {{ r.track.name }}
                         </div>
@@ -38,11 +45,20 @@
 
                                   {{ r.created_on|timesince }} ago
                               </div>
-
-
                       {% else %}
 
                       {% endif %}
+
+                    {% if r.status == 'P' %}
+                        <div class="now-playing">
+                            <img src="{{ STATIC_URL }}img/now_playing_normal.gif"/>
+                            <p>Now Playing</p>
+                        </div>
+
+                        <hr/>
+
+                    {% endif %}
+
                 </div>
             {% endfor %}
 
@@ -85,11 +101,21 @@
 {% block extra-style %}
 <style>
 
+
+
     .now-playing {
-        float:left;
-        margin-top:5px;
-        margin-left: -7px;
+        margin-left: 20px;
     }
+
+    .now-playing p {
+        font-weight: 600;
+        color:#666;
+        font-size: 14px;
+        margin-left: 25px;
+        margin-top: -17px;
+    }
+
+
     .playlist-item {
         margin-bottom:10px;
     }
@@ -116,14 +142,20 @@
     .track-request-button {
     }
 
-    .track-cover {
+    .top-request-list .track-cover {
         border: 1px solid #ccc;
         width:80px;
         height:80px;
     }
 
+    .playlist-item .track-cover {
+        width:65px;
+        float:left;
+        margin-left:-60px;
+
+    }
+
     .top-request-list {
-        border: 1px solid #efefef;
         padding:10px;
         background: #fff;
     }
