@@ -30,8 +30,6 @@
 </head>
 
 <body>
-
-
   <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
       <div class="container">
@@ -46,10 +44,6 @@
         <div class="nav-collapse">
 
         <ul class="nav">
-          {% if perms.requests.request_list %}
-          <li><a href="{% url requests.request_list %}">Playlist</a></li>
-          {% endif %}
-
           {% if perms.tracks.artist_list %}
           <li><a href="{% url tracks.artist_list %}">Artists</a></li>
           {% endif %}
@@ -75,13 +69,14 @@
         </ul>
 
         <ul class="nav pull-right">
-          {% block login %}
           {% if request.user and request.user.is_authenticated %}
-          <li class="pull-right"><a href="{% url users.user_logout %}?go=/">{{ request.user.username }} | logout</a></li>
+          <form class="navbar-search pull-left" style="padding-right: 75px" method="get" action="{% url tracks.track_list %}">
+            <input type="text" name="search" value="{{ search }}" class="search-query" placeholder="Search Music">
+            {% csrf_token %}
+          </form>
           {% else %}
 	  <li class="pull-right"><a href="{% url users.user_register %}">Register</a></li>          <li class="pull-right"><a href="{% url users.user_login %}">Login</a></li>
           {% endif %}
-          {% endblock %}
         </ul>
 
         </div>
@@ -89,89 +84,98 @@
     </div>
   </div>
 
-<div class="container">
-
-    {% if now_playing %}
-        {% load thumbnail %}
-        <div class="banner">
-            <div class="row">
-                <div class="span2">
-                    <div class="track-cover">
-                        {% thumbnail now_playing.track.album.cover "350" crop="center" as im %}
-                            <img src="{{ im.url }}" width="100%"/>
-                        {% endthumbnail %}
-                    </div>
-                </div>
-                <div class="span6">
-                    <div class="track-name">
-                        {{ now_playing.track.name }}
-                    </div>
-                    <div class="track-artist">
-                        <a href="{% url tracks.artist_read now_playing.track.album.artist.id %}">{{ now_playing.track.album.artist }}</a>
-                    </div>
-                    <div class="track-album">
-                        {{ now_playing.track.album }}
-                    </div>
-
-                    {% if r.created_by_id != -1 %}
-                        <div class="requested-by">
-                            Requested by
-                            {% if now_playing.created_by.first_name %}
-                                {{ now_playing.created_by.first_name }}
-                            {% else %}
-
-                                {% if "android" in now_playing.created_by.username %}
-                                    SMS
-                                {% else %}
-                                    {{ now_playing.created_by }}
-                                {% endif %}
-
-                            {% endif %}
-
-                            {{ now_playing.created_on|timesince }} ago
-                        </div>
-                    {% else %}
-
-                    {% endif %}
-
-                </div>
-
-
-                <div class="span3">
-                    {% if next_up %}
-                        <div class="next-up">
-                        <h6>Next up:</h6>
-                            <div class="track-name">
-                                {{ next_up.track }}</div>
-                            <div class="track-artist">
-                                {{ next_up.track.album.artist }}
-                            </div>
-                            {% if next_up.created_by_id != -1 %}
-                                <div class="requested-by">
-                                    Requested by
-                                    {% if next_up.created_by.first_name %}
-                                        {{ next_up.created_by.first_name }}
-                                    {% else %}
-
-                                        {% if "android" in next_up.created_by.username %}
-                                            SMS
-                                        {% else %}
-                                            {{ next_up.created_by }}
-                                        {% endif %}
-
-                                    {% endif %}
-                                </div>
-                            {% endif %}
-                        </div>
-
-                    {% endif %}
-                </div>
-            </div>
+{% if now_playing %}
+  {% load thumbnail %}
+  <div class="banner">
+    <div class="container">
+    <div class="row">
+      <div class="span3">
+        <div class="track-cover">
+          {% thumbnail now_playing.track.album.cover "200" crop="center" as im %}
+            <img src="{{ im.url }}" width="100%"/>
+          {% endthumbnail %}
+        </div>
+      </div>
+      <div class="span5">
+        <div class="track-name">
+          {{ now_playing.track.name }}
+        </div>
+        <div class="track-artist">
+          <a href="{% url tracks.artist_read now_playing.track.album.artist.id %}">{{ now_playing.track.album.artist }}</a>
+        </div>
+        <div class="track-album">
+          {{ now_playing.track.album }}
         </div>
 
-    {% endif %}
+        {% if r.created_by_id != -1 %}
+        <div class="requested-by">
+        Requested by
+        {% if now_playing.created_by.first_name %}
+          {{ now_playing.created_by.first_name }}
+        {% else %}
 
+        {% if "android" in now_playing.created_by.username %}
+          SMS
+        {% else %}
+          {{ now_playing.created_by }}
+        {% endif %}
 
+        {% endif %}
+
+        {{ now_playing.created_on|timesince }} ago
+        </div>
+        {% else %}
+      {% endif %}
+      </div>
+
+      <div class="span4">
+        {% if next_up %}
+        <div class="next-up" style="margin-bottom: 20px">
+          <h6>Next up:</h6>
+          <div class="track-name">
+            {{ next_up.track }}
+          </div>
+          <div class="track-artist">
+            {{ next_up.track.album.artist }}
+          </div>
+          {% if next_up.created_by_id != -1 %}
+          <div class="requested-by">
+          Requested by
+          {% if next_up.created_by.first_name %}
+            {{ next_up.created_by.first_name }}
+          {% else %}
+
+          {% if "android" in next_up.created_by.username %}
+            SMS
+          {% else %}
+            {{ next_up.created_by }}
+          {% endif %}
+          {% endif %}
+          </div>
+          {% endif %}
+        </div>
+        {% endif %}
+
+        <div style="color:#aaa;">
+          <div>
+            <p style="font-weight: 100; font-size: 20px">SMS @ 0787 047 455</p>
+            <p>
+	        Request by sending a title or artist name<br/>
+	        Upvote by sending the word: yay<br/>
+	        Downvote by sending the word: boo<br/>
+            </p>
+          </div>
+
+          <a class="btn btn-inverse" style="margin-right:10px" href="{% url tracks.track_create %}">Add Music</a>
+          <a class="btn btn-inverse" href="{% url tracks.track_list %}">Request Song</a>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+{% endif %}
+
+<div class="container">
   {% load smartmin %}
       
   {% block content-div %}

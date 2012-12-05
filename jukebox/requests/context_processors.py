@@ -13,3 +13,5 @@ def now_playing(request):
             else:
                 break
         return dict(now_playing=now_playing, next_up=next_up, playlist=playlist)
+    else:
+        return dict()

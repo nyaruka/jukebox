@@ -16,7 +16,7 @@ class RequestCRUDL(SmartCRUDL):
     class List(SmartListView):
         title = "Playlist"
         refresh = 30000
-        paginate_by = 75
+        paginate_by = 25
         default_order = ('-created_on',)
         fields = ('track', 'status', 'created_by', 'created_on')
         field_config = { 'track': dict(label="Song"),

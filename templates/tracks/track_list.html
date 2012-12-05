@@ -1,0 +1,123 @@
+{% extends "smartmin/list.html" %}
+
+{% load thumbnail %}
+
+{% block table-buttons %}
+{% endblock %}
+
+{% block pre-content %} {% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="span12">
+
+<div class="track-list">
+{% for track in track_list %}
+<div class="playlist-item">
+  <a class="posterize" href="{% url requests.request_new %}?track={{ track.id }}">
+  <div class="track-cover" style="position:relative;">
+    {% thumbnail track.album.cover "120" crop="center" as im %}
+    <img class="cover" src="{{ im.url }}" width="120px" height="120px"/>
+    <img class="play-button" src="{{ STATIC_URL }}img/play.png">
+    {% endthumbnail %}
+  </div>
+  </a>
+
+  <div class="track-info">
+    <div class="track-name">
+     {{ track.name|truncatewords:"4" }}
+    </div>
+    <div class="track-artist">
+      <a href="{% url tracks.artist_read track.album.artist_id%}">{{ track.album.artist|truncatewords:"4" }}</a>
+    </div>
+  </div>
+</div>
+
+{% endfor %}
+</div>
+</div>
+</div>
+
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
+
+{% block extra-style %}
+<style>
+html, body {
+  background-color:#2a2a2a;
+  color: #f6f6f6;
+}
+
+.playlist-item {
+  margin-bottom: 20px;
+  width: 200px;
+}
+
+.track-info {
+  margin-top: 10px;
+  background-color: #222;
+  margin-right: 10px;
+  padding: 10px;
+  min-height: 80px;
+  font-size: 12px;
+  border: 1px solid #151515;
+}
+
+.track-list .track-name {
+  font-size: 18px;
+  line-height: 17px;
+}
+
+.track-list .track-artist {
+  font-weight: 200;
+}
+
+.track-list .track-cover img.play-button {
+  display: none;
+  position:absolute;
+  top:30px;
+  left:30px;
+  width:60px;
+  height:60px;
+}
+
+.track-list {
+  padding-top: 30px;
+}
+
+.track-list .playlist-item {
+  float: left;
+  width: 310px;
+}
+
+.track-list .track-cover img {
+  width: 120px;
+  height: 120px;
+}
+
+.track-list .track-cover {
+  width: 120px;
+  cursor: pointer;
+}
+</style>
+{% endblock %}
+
+{% block extra-script %}
+{{ block.super }}
+<script>
+  $(function(){
+    $(".track-cover .cover").hover(function(){
+      $(this).parent().children(".play-button").fadeIn();
+    }, 
+    function(){
+      $(this).parent().children(".play-button").hide();
+    });
+  });
+
+  $(".track-cover .play-button").hover(function(){
+    $(this).parent().children(".play-button").show();
+  }, function(){});
+</script>
+{% endblock %}

@@ -5,29 +5,29 @@
 {% block content %}
 
     {% for album in object.albums.all %}
-        <div class="row">
-            <div class="span12 album-name">{{ album.name }}</div>
-        </div>
-        <div class="row album-container">
-            <div class="span3 album-list-item">
-                <div class="cover">
-                    {% thumbnail album.cover "350" crop="center" as im %}
-                        <img src="{{ im.url }}" width="100%"/>
-                    {% endthumbnail %}
-                </div>
-            </div>
-            <div class="span1">&nbsp;</div>
-            <div class="span8 track-list">
-            {% for track in album.tracks.all %}
-                <div class="row track-list-item">
-                    <div class="span6 track-name">{{ track.name }}</div>
-                    <div class="span1 track-length">{{ track.get_length }}</div>
-                    <div class="span1 pull-right"><a class="btn btn-mini posterize" href="{% url requests.request_new %}?track={{ track.id }}">Request</a></div>
-
-                </div>
+<div class="row">
+  <div class="span12 album-name">{{ album.name }}</div>
+</div>
+<div class="row album-container">
+  <div class="span3 album-list-item">
+    <div class="cover">
+      {% thumbnail album.cover "350" crop="center" as im %}
+      <img src="{{ im.url }}" width="100%"/>
+      {% endthumbnail %}
+    </div>
+  </div>
+  <div class="span1">&nbsp;</div>
+  <div class="span8 track-list">
+    {% for track in album.tracks.all %}
+    <div class="row track-list-item">
+      <div class="span6 track-name">{{ track.name }}</div>
+      <div class="span1 track-length">{{ track.get_length }}</div>
+      <div class="span1 pull-right"><a class="btn btn-mini posterize" href="{% url requests.request_new %}?track={{ track.id }}">Request</a></div>
+      
+    </div>
             {% endfor %}
-            </div>
-        </div>
+  </div>
+</div>
     {% endfor %}
 {% endblock content %}
 
@@ -46,8 +46,9 @@
       font-size: 44px;
       line-height: 44px;
       background: #f6f6f6;
-      font-weight: 100;
+      color: #333;
       text-align: right;
+      font-weight: 100;
       padding-right:20px;
       padding-top:20px;
       padding-bottom: 10px;

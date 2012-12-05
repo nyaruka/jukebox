@@ -30,15 +30,11 @@
  
 
 {% block pjax %}
-
 <div id="pjax" class="container" >
-
-
-
   {% for req  in  object_list %}
 
   {% if forloop.first %}
-  <div style="width:550px;float:right">
+  <div style="width:550px;float:right" class="now-playing">
     
     <div>Now Playing</div>
     <div>{{req.track.name}}</div>
@@ -67,14 +63,8 @@
     <span>{{req.track.album.artist.name}} - {{req.track.album.name}}</span>
     <hr>
   </div>
- 
   {% endif %}
-  
-  
   {% endfor %}
-
-
-  
 </div>
 
 {% endblock pjax %}

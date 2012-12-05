@@ -3,21 +3,16 @@
 {% block content %}
     {% load thumbnail %}
 
-        <div class="span6">
+        <div class="span9">
 
             {% for r in object_list %}
-                <div class="row playlist-item">
+                <div class="row playlist-item {% if r.status == 'P' %}playing{% endif %}">
 
-                    {% if r.status == 'P' %}
-                        <hr/>
                         <div class="track-cover">
-                            {% if r.status == 'P' %}
-                                {% thumbnail r.track.album.cover "350" crop="center" as im %}
-                                    <img src="{{ im.url }}" width="100%"/>
-                                {% endthumbnail %}
-                            {% endif %}
+                           {% thumbnail r.track.album.cover "350" crop="center" as im %}
+                           <img src="{{ im.url }}" width="100%"/>
+                           {% endthumbnail %}
                         </div>
-                    {% endif %}
 
 
                         <div class="track-name">
@@ -53,15 +48,15 @@
                             <img src="{{ STATIC_URL }}img/now_playing_normal.gif"/>
                             <p>Now Playing</p>
                         </div>
-
-                        <hr/>
-
                     {% endif %}
 
                 </div>
             {% endfor %}
 
         </div>
+
+        <!-- 
+
         <div class="top-request-list span5 pull-right">
             <div class="row">
                 <div class="span5">
@@ -87,6 +82,8 @@
                 </div>
             {% endfor %}
         </div>
+
+        -->
 
     <div class="row">
         {% block paginator %}

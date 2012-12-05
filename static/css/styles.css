@@ -3,6 +3,11 @@ html, body {
     background-color: #fff;
 }
 
+.page-header {
+    border-bottom: 0px;
+    margin-bottom: 0px;
+}
+
 .page-header h2 {
     font-weight: 100;
     font-size:48px;
@@ -30,18 +35,20 @@ footer {
 }
 
 
-/* Playlists */
 .now-playing {
+    margin-top: 30px;
+}
+
+.now-playing img {
+    margin-bottom: 5px;
 }
 
 .now-playing p {
     font-weight: 600;
     color:#666;
     font-size: 14px;
-    margin-left: 25px;
-    margin-top: -17px;
+    display: inline-block;
 }
-
 
 .playlist-item {
     margin-bottom:10px;
@@ -75,10 +82,9 @@ footer {
 }
 
 .playlist-item .track-cover {
-    width:65px;
+    width:100px;
     float:left;
-    margin-left:-80px;
-
+    margin-right: 20px;
 }
 
 .top-request-list {
@@ -132,22 +138,39 @@ footer {
     padding-bottom:20px;
 }
 
-
 /* Add app specific CSS here */
 
+.playing {
+    background-color: #333;
+    border-bottom: 2px solid #000;
+    color: #fff;
+    margin-left: -520px; 
+    padding-left: 500px;
+
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    border-top: 2px solid #000;
+    border-bottom: 2px solid #000;
+}
+
+.banner .row .span3 {
+    margin-left: 0px;
+}
+
 .banner {
-    padding: 20px 5px;
+    padding-bottom: 20px;
     padding-top: 60px;
-    border: 1px solid #e6e6e6;
-    background-color: #e6e6e6;
-    -moz-border-radius-bottomright: 20px;
-    -moz-border-radius-bottomleft: 20px;
-    -webkit-border-bottom-right-radius: 20px;
-    -webkit-border-bottom-left-radius: 20px;
+    background-color: #333;
+    border-bottom: 2px solid #000;
+    color: #fff;
+}
+
+.banner .row {
+    margin-left: 0px;
 }
 
 .banner .track-cover {
-    padding-left:20px;
 }
 
 .banner .track-name {
@@ -165,6 +188,7 @@ footer {
 .banner .track-album {
     font-size: 16px;
     line-height: 16px;
+    margin-bottom: 10px;
 }
 
 .banner .requested-by {
