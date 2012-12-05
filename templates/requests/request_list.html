@@ -8,9 +8,19 @@
 
             {% for r in object_list %}
                 <div class="row playlist-item">
-                    <div class="track-name">
-                          {{ r.track.name }}
+
+                    <div class="now-playing">
+                    {% if r.status == 'P' %}
+                        <img src="{{ STATIC_URL }}img/now_playing_normal.gif"/>
+                    {% endif %}
                     </div>
+                        <div class="track-name">
+                            {{ r.track.name }}
+                        </div>
+
+                        <div class="track-artist">
+                            <a href="{% url tracks.artist_read r.track.album.artist_id%}">{{ r.track.album.artist }}</a>
+                        </div>
                           {% if r.created_by_id != -1 %}
                               <div class="requested-by">
                               Requested by
@@ -75,6 +85,11 @@
 {% block extra-style %}
 <style>
 
+    .now-playing {
+        float:left;
+        margin-top:5px;
+        margin-left: -7px;
+    }
     .playlist-item {
         margin-bottom:10px;
     }
