@@ -192,6 +192,8 @@ INSTALLED_APPS = (
     'requests',
 
     # 'users',
+
+    'sorl.thumbnail',
 )
 
 # A sample logging configuration. The only tangible logging

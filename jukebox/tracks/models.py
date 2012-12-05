@@ -18,7 +18,7 @@ class Album(SmartModel):
     name = models.CharField(max_length=64, unique=True,
                          help_text="The name of this album")
     artist = models.ForeignKey(Artist,
-                           help_text="The artist who recorded this album")
+                           help_text="The artist who recorded this album", related_name="albums")
     year = models.IntegerField(null=True, blank=True,
                                help_text="The year this album was released")
     cover = models.ImageField(upload_to="covers", null=True, blank=True,
@@ -82,7 +82,7 @@ class Track(SmartModel):
         Creates a new Track, Album and Artist from the given mp3 file.  You will be returned
         a Track object with the associated items
         """
-	audio = mutagen.File(mp3_file, easy=True)
+        audio = mutagen.File(mp3_file, easy=True)
         user = self.created_by
 
         genres = Genre.objects.filter(name__iexact=audio['genre'][0])

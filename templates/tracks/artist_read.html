@@ -1,0 +1,89 @@
+{% extends "smartmin/read.html" %}
+
+{% load thumbnail %}
+
+
+{% block title %}
+    asdf
+{% endblock title %}
+{% block content %}
+
+    {% for album in object.albums.all %}
+        <div class="row">
+            <div class="span12 album-name">{{ album.name }}</div>
+        </div>
+        <div class="row album-container">
+            <div class="span3 album-list-item">
+                <div class="cover">
+                    {% thumbnail album.cover "350" crop="center" as im %}
+                        <img src="{{ im.url }}" width="100%"/>
+                    {% endthumbnail %}
+                </div>
+            </div>
+            <div class="span1">&nbsp;</div>
+            <div class="span8 track-list">
+            {% for track in album.tracks.all %}
+                <div class="row track-list-item">
+                    <div class="span6 track-name">{{ track.name }}</div>
+                    <div class="span1 track-length">{{ track.get_length }}</div>
+                    <div class="span1 pull-right"><a class="btn btn-mini posterize" href="{% url requests.request_new %}?track={{ track.id }}">Request</a></div>
+
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+{% endblock content %}
+
+{% block extra-style %}
+<style>
+
+  .page-header h2 {
+      font-weight: 100;
+      font-size:48px;
+      padding-bottom: 20px;
+      padding-top:40px;
+  }
+  .album-container {
+      margin-bottom: 30px;
+      border-bottom: 1px solid #e6e6e6;
+  }
+
+  .album-list-item {
+
+  }
+
+  .album-name {
+      font-size: 44px;
+      line-height: 44px;
+      background: #f6f6f6;
+      font-weight: 100;
+      text-align: right;
+      padding-right:20px;
+      padding-top:20px;
+      padding-bottom: 10px;
+  }
+
+  .track-list-item {
+      font-size:18px;
+      color:#232323;
+      border-bottom: 1px solid #e6e6e6;
+      padding:10px 0;
+
+  }
+
+  .track-list {
+      padding-top:20px;
+  }
+  .track-name {
+      font-weight: 100;
+      font-size: 24px;
+      line-height: 24px;
+  }
+  .track-length {
+      text-align: right;
+  }
+
+
+</style>
+{% endblock extra-style %}
