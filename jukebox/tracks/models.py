@@ -45,7 +45,7 @@ class Album(SmartModel):
             except:
                 sleep(10)
 
-    def find_album_art(self, track_name):
+    def find_album_art(self, track_name=None):
         album_name = re.sub('([^a-zA-Z0-9])', ' ', self.name)
         album_name = re.sub('( +)', ' ', album_name)
 
@@ -60,6 +60,11 @@ class Album(SmartModel):
 
         if not image_url:
             image_url = self.fetch_image_url(artist_name)
+
+        if not image_url and track_name:
+            track_name = re.sub('([^a-zA-Z0-9])', ' ', track_name)
+            track_name = re.sub('( +)', ' ', track_name)
+            image_url = self.fetch_image_url(track_name)
 
         # found a match, woo!
         if image_url:
@@ -77,8 +82,11 @@ class Album(SmartModel):
             self.save()
             
             os.unlink(tmp_name)
+            return image_url
+
         else:
             print "No image found"
+            return None
             
     def update_album_art(self, mp3_file):
         mp3_data = MP3(mp3_file)
