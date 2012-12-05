@@ -68,21 +68,23 @@ class Album(SmartModel):
 
         # found a match, woo!
         if image_url:
-            print "found match: %s" % image_url
+            try:
+                image = urlopen(image_url)
 
-            image = urlopen(image_url)
+                tmp_name = mktemp()
+                tmp_file = open(tmp_name, 'wb')
+                tmp_file.write(image.read())
+                tmp_file.close()
 
-            tmp_name = mktemp()
-            tmp_file = open(tmp_name, 'wb')
-            tmp_file.write(image.read())
-            tmp_file.close()
-
-            tmp_file = open(tmp_name, 'r')
-            self.cover.save('%s.jpg' % self.name, File(tmp_file), save=True)
-            self.save()
+                tmp_file = open(tmp_name, 'r')
+                self.cover.save('%s.jpg' % self.name, File(tmp_file), save=True)
+                self.save()
             
-            os.unlink(tmp_name)
-            return image_url
+                os.unlink(tmp_name)
+                print "found match: %s" % image_url
+                return image_url
+            except:
+                return None
 
         else:
             print "No image found"
