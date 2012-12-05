@@ -20,7 +20,6 @@
   {# load compress #}
   {# compress css #}
   <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap.css">
-  <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/smartmin_styles.css">
   <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/styles.css">
 
   <link href="{{ STATIC_URL }}css/skin/blue.monday/jplayer.blue.monday.css" rel="stylesheet" type="text/css" />
@@ -31,6 +30,7 @@
 </head>
 
 <body>
+
 
   <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
@@ -56,14 +56,6 @@
 
           {% if perms.tracks.track_list %}
           <li><a href="{% url tracks.track_list %}">Tracks</a></li>
-          {% endif %}
-
-          {% if perms.tracks.album_list %}
-          <!--li><a href="{% url tracks.album_list %}">Albums</a></li-->
-          {% endif %}
-
-          {% if perms.tracks.genre_list %}
-          <!--li><a href="{% url tracks.genre_list %}">Genres</a></li-->
           {% endif %}
 
           {% if perms.message.message_list %}
@@ -96,23 +88,94 @@
       </div>
     </div>
   </div>
-</div>
 
 <div class="container">
+
+    {% if now_playing %}
+        {% load thumbnail %}
+        <div class="banner">
+            <div class="row">
+                <div class="span2">
+                    <div class="track-cover">
+                        {% thumbnail now_playing.track.album.cover "350" crop="center" as im %}
+                            <img src="{{ im.url }}" width="100%"/>
+                        {% endthumbnail %}
+                    </div>
+                </div>
+                <div class="span6">
+                    <div class="track-name">
+                        {{ now_playing.track.name }}
+                    </div>
+                    <div class="track-artist">
+                        <a href="{% url tracks.artist_read now_playing.track.album.artist.id %}">{{ now_playing.track.album.artist }}</a>
+                    </div>
+                    <div class="track-album">
+                        {{ now_playing.track.album }}
+                    </div>
+
+                    {% if r.created_by_id != -1 %}
+                        <div class="requested-by">
+                            Requested by
+                            {% if now_playing.created_by.first_name %}
+                                {{ now_playing.created_by.first_name }}
+                            {% else %}
+
+                                {% if "android" in now_playing.created_by.username %}
+                                    SMS
+                                {% else %}
+                                    {{ now_playing.created_by }}
+                                {% endif %}
+
+                            {% endif %}
+
+                            {{ now_playing.created_on|timesince }} ago
+                        </div>
+                    {% else %}
+
+                    {% endif %}
+
+                </div>
+
+
+                <div class="span3">
+                    {% if next_up %}
+                        <div class="next-up">
+                        <h6>Next up:</h6>
+                            <div class="track-name">
+                                {{ next_up.track }}</div>
+                            <div class="track-artist">
+                                {{ next_up.track.album.artist }}
+                            </div>
+                            {% if next_up.created_by_id != -1 %}
+                                <div class="requested-by">
+                                    Requested by
+                                    {% if next_up.created_by.first_name %}
+                                        {{ next_up.created_by.first_name }}
+                                    {% else %}
+
+                                        {% if "android" in next_up.created_by.username %}
+                                            SMS
+                                        {% else %}
+                                            {{ next_up.created_by }}
+                                        {% endif %}
+
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+    {% endif %}
+
+
   {% load smartmin %}
       
   {% block content-div %}
   <div class="content">
-    {% block messages %}
-    {% if messages %}
-    {% for message in messages %}
-    <div class="alert alert-{{ message.tags }}">
-      <a class="close" data-dismiss="alert">×</a>
-      {{ message }}
-    </div>
-    {% endfor %}
-    {% endif %}
-    {% endblock messages %}
 
     {% block pre-content %}
     {% endblock %}
