@@ -73,6 +73,7 @@ class AlbumCRUDL(SmartCRUDL):
     actions = ('list', 'read', 'update', 'recover')
 
     class List(SmartListView):
+        search_fields = ('name__icontains', 'artist__name__icontains')
         fields = ('name', 'artist', 'year')
 
     class Recover(SmartReadView):
