@@ -112,7 +112,7 @@
           {{ now_playing.track.album }}
         </div>
 
-        {% if r.created_by_id != -1 %}
+        {% if now_playing.created_by_id != -1 %}
         <div class="requested-by">
         Requested by
         {% if now_playing.created_by.first_name %}
