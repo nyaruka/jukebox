@@ -132,26 +132,44 @@ class Track(SmartModel):
         Creates a new Track, Album and Artist from the given mp3 file.  You will be returned
         a Track object with the associated items
         """
+
         audio = mutagen.File(mp3_file, easy=True)
         user = self.created_by
 
-        genres = Genre.objects.filter(name__iexact=audio['genre'][0])
-        if not genres:
-            genre = Genre.objects.create(name=audio['genre'][0],
+        album_name = audio['album'][0][:64]
+        artist_name = audio['artist'][0][:64]
+        track_title = audio['title'][0][:128]
+
+        genre = None
+        genre_name = None
+        if 'genre' in audio:
+            genre_name = audio['genre'][0][:64]
+
+
+        # take the first genre if its csv
+        if genre_name:
+            genre_name = genre_name.split(',')[0]
+
+
+        if genre_name:
+            genres = Genre.objects.filter(name__iexact=genre_name)
+            if not genres:
+                genre = Genre.objects.create(name=genre_name,
                                          created_by=user,
                                          modified_by=user)
-        else:
-            genre = genres[0]
+            else:
+                genre = genres[0]
 
-        artists = Artist.objects.filter(name__iexact=audio['artist'][0])
+
+        artists = Artist.objects.filter(name__iexact=artist_name)
         if not artists:
-            artist = Artist.objects.create(name=audio['artist'][0],
+            artist = Artist.objects.create(name=artist_name,
                                            created_by=user,
                                            modified_by=user)
         else:
             artist = artists[0]
 
-        albums = Album.objects.filter(name__iexact=audio['album'][0])
+        albums = Album.objects.filter(name__iexact=album_name)
         if not albums:
             year = audio.get('date', None)
             if year:
@@ -161,7 +179,7 @@ class Track(SmartModel):
                 else:
                     year = None
 
-            album = Album.objects.create(name=audio['album'][0],
+            album = Album.objects.create(name=album_name,
                                          artist=artist,
                                          year=year,
                                          created_by=user,
@@ -169,7 +187,7 @@ class Track(SmartModel):
         else:
             album = albums[0]
 
-        self.name = audio['title'][0]
+        self.name = track_title
         self.album = album
         self.genre = genre
         self.length = audio.info.length
