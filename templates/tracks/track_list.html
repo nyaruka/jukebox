@@ -19,11 +19,11 @@
   {% if track.album.cover %}
     {% thumbnail track.album.cover "120" crop="center" as im %}
     <img class="cover" src="{{ im.url }}" width="120px" height="120px"/>
-    <img class="play-button" src="{{ STATIC_URL }}img/play.png">
     {% endthumbnail %}
   {% else %}
-      <img src="{{ STATIC_URL }}/img/missing.png" width="100%"/>
+      <img class="cover" src="{{ STATIC_URL }}/img/missing.png" width="120px" height="120px"/>
   {% endif %}
+      <img class="play-button" src="{{ STATIC_URL }}img/play.png">
   </div>
   </a>
 

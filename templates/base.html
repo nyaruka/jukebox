@@ -92,12 +92,11 @@
       <div class="span3">
         <div class="track-cover">
         {% if now_playing.track.album.cover %}
-            cover
           {% thumbnail now_playing.track.album.cover "200" crop="center" as im %}
-            <img src="{{ im.url }}" width="100%"/>
+            <img src="{{ im.url }}" width="200" height="200"/>
           {% endthumbnail %}
         {% else %}
-            <img src="{{ STATIC_URL }}/img/missing.png" width="200"/>
+            <img src="{{ STATIC_URL }}/img/missing.png" width="200" height="200"/>
         {% endif %}
         </div>
       </div>
