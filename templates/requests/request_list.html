@@ -9,9 +9,13 @@
                 <div class="row playlist-item {% if r.status == 'P' %}playing{% endif %}">
 
                         <div class="track-cover">
+                        {% if r.track.album.cover %}
                            {% thumbnail r.track.album.cover "350" crop="center" as im %}
                            <img src="{{ im.url }}" width="100%"/>
                            {% endthumbnail %}
+                        {% else %}
+                            <img src="{{ STATIC_URL }}/img/missing.png" width="100%"/>
+                        {% endif %}
                         </div>
 
 
