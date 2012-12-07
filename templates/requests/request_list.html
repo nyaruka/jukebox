@@ -73,7 +73,10 @@
     $(".playlist-items").infinitescroll({
       navSelector  : "div.pagination",            
       nextSelector : "div.pagination a.next",    
-      itemSelector : "div.playlist-item"
+      itemSelector : "div.playlist-item",
+      bufferPx     : 100,
+      donetext     : "No more requests.",
+      loadingText  : "Loading more requests..."
     });
   });
 </script>
