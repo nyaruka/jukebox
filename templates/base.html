@@ -127,8 +127,21 @@
         {% endif %}
 
         {{ now_playing.created_on|timesince }} ago
+
         </div>
         {% else %}
+
+            {% with now_playing.track.requests.all|length as requested %}
+
+                <div class="now-playing-stats">
+                <a class="btn btn-small btn-success" href="#"><i class="icon-white icon-arrow-up"></i>{{ now_playing.track.up_votes.all|length }}</a>
+                <a class="btn btn-small btn-danger" href="#"><i class="icon-white icon-arrow-down"></i>{{ now_playing.track.down_votes.all|length }}</a>
+
+                {{ requested }} request{{ requested|pluralize:",s" }}
+                </div>
+
+
+            {% endwith %}
       {% endif %}
       </div>
 

@@ -210,3 +210,8 @@ footer {
 .next-up .requested-by {
     margin-top:5px;
 }
+
+.now-playing-stats {
+    height:100%;
+    vertical-align: bottom;
+}

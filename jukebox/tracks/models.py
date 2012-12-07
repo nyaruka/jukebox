@@ -135,6 +135,13 @@ class Track(SmartModel):
     mp3_file = models.FileField(upload_to="mp3s",
                                 help_text="The mp3 file that contains the music")
 
+
+    def up_votes(self):
+        return self.votes.filter(score=1)
+
+    def down_votes(self):
+        return self.votes.filter(score=-1)
+
     def update_from_file(self, mp3_file):
         """
         Creates a new Track, Album and Artist from the given mp3 file.  You will be returned
