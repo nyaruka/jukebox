@@ -28,6 +28,14 @@ class Album(SmartModel):
     cover = models.ImageField(upload_to="covers", null=True, blank=True,
                               help_text="The cover art if there is one")
 
+    @classmethod
+    def fix_album_art(cls):
+        # get all tracks with no art
+        for track in Track.objects.filter(album__cover=""):
+            album = Album.objects.get(pk=track.album.pk)
+            if not album.cover:
+                album.find_album_art(track.name)
+
     def fetch_image_url(self, query_string):
         got_result = False
         tries = 0

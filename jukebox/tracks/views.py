@@ -31,14 +31,14 @@ class TrackCRUDL(SmartCRUDL):
 
         def post_save(self, obj):
             obj = super(TrackCRUDL.Create, self).post_save(obj)
-            obj.album.update_album_art(str(obj.mp3_file.file))
+            obj.album.find_album_art(obj.name)
             return obj
 
     class List(SmartListView):
         fields = ('name', 'artist', 'length', 'genre', 'album', 'request')
         search_fields = ('name__icontains', 'album__artist__name__icontains')
         default_order = ('-created_on',)
-        paginate_by = 30
+        paginate_by = 60
 
         def lookup_field_link(self, context, field, obj):
             return reverse("tracks.artist_read", args=[obj.album.artist.id])
