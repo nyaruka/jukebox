@@ -42,7 +42,6 @@ class Command(BaseCommand):
                             request.save()
                     
                     if not playlist:
-
                         # find all songs that have been requested by real users
                         requests = Request.objects.exclude(created_by_id=-1)
 
@@ -62,15 +61,12 @@ class Command(BaseCommand):
                                            modified_by=user,
                                            played_on=None)
                         
-                        #for the bug of tracks stucking on the playing status because of an unxpected system halt 
+                        # for the bug of tracks stucking on the playing status because of an unxpected system halt 
                         request_completed = Request.objects.filter(status='P').order_by('created_on')
-                        if request_completed:
-                            for req in request_completed:
-                                if long((datetime.datetime.now() - req.played_on).total_seconds()) > req.track.length:
-                                    req.status = 'C'
-                                    req.save()
-                       
-                               
+                        for req in request_completed:
+                            if long((datetime.datetime.now() - req.played_on).total_seconds()) > req.track.length:
+                                req.status = 'C'
+                                req.save()
 
                 except:
                     import traceback
