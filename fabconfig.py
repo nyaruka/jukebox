@@ -1,0 +1,13 @@
+config = dict(
+    port='8000',
+    friendly_name='Jukebox',
+    name='jukebox',
+    user='jukebox',
+    env='env',
+    settings='settings.py.dev',
+    db='jukebox',
+    db_user='jukebox',
+    db_host='localhost',
+    server_db_host='localhost',
+    custom_domains='jukebox.klab.rw',
+    celery=False)
