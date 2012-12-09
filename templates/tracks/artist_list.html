@@ -1,0 +1,129 @@
+{% extends "smartmin/list.html" %}
+
+{% load thumbnail %}
+
+{% block table-buttons %}
+{% endblock %}
+
+{% block pre-content %} 
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="span12">
+
+<div class="artist-list">
+{% for artist in artist_list %}
+<div class="artist-item">
+  <a href="{% url tracks.artist_read artist.id %}">
+  <div class="track-cover" style="position:relative;">
+    {% if artist.cover %}
+    {% thumbnail artist.cover "120" crop="center" as im %}
+    <img class="cover" src="{{ im.url }}" width="120px" height="120px"/>
+    {% endthumbnail %}
+    {% else %}
+    <img class="cover" src="{{ STATIC_URL }}/img/missing.png" width="120px" height="120px"/>
+    {% endif %}
+  </div>
+  </a>
+
+  <div class="artist-info">
+    <div class="artist-name">
+      {{ artist.name }}
+    </div>
+  </div>
+</div>
+{% endfor %}
+</div>
+
+<div class="pagination">
+  {% if page_obj.has_next %}
+  <a class="next" href="{{url_params|safe}}page={{page_obj.next_page_number}}">Next &rarr;</a>
+  {% endif %}
+</div>
+
+</div>
+</div>
+
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
+
+{% block extra-style %}
+<style>
+html, body {
+  background-color:#2a2a2a;
+  color: #f6f6f6;
+}
+
+.artist-item {
+  margin-bottom: 20px;
+  width: 200px;
+}
+
+.artist-item .track-cover {
+  float: left;
+  margin-right: 20px;
+}
+
+.artist-name {
+  margin-top: 5px;
+  font-weight: 100;
+  font-size: 22px;
+  letter-spacing: .1em;
+  line-height: 22px;
+}
+
+.artist-info {
+  margin-top: 10px;
+  background-color: #222;
+  margin-right: 10px;
+  padding: 10px;
+  min-height: 80px;
+  font-size: 12px;
+  border: 1px solid #151515;
+}
+
+.artist-list .artist-name {
+  font-size: 18px;
+  line-height: 17px;
+}
+
+.artist-list {
+  padding-top: 30px;
+}
+
+.artist-list .artist-item {
+  float: left;
+  width: 310px;
+}
+
+.artist-list .track-cover img {
+  width: 120px;
+  height: 120px;
+}
+
+.artist-list .track-cover {
+  width: 120px;
+  cursor: pointer;
+}
+</style>
+{% endblock %}
+
+{% block extra-script %}
+{{ block.super }}
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.infinitescroll.min.js"></script>
+<script>
+  $(function(){
+    $(".track-list").infinitescroll({
+      navSelector  : "div.pagination",            
+      nextSelector : "div.pagination a.next",    
+      itemSelector : "div.artist-item",
+      bufferPx     : 100,
+      donetext     : "No more requests.",
+      loadingText  : "Loading more requests..."
+    });
+  });
+</script>
+{% endblock %}

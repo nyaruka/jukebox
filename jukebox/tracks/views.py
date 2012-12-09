@@ -5,15 +5,28 @@ from django.core.cache import cache
 class ArtistCRUDL(SmartCRUDL):
     model = Artist
     actions = ('list', 'read', 'update')
-    permission = None
 
     class List(SmartListView):
         fields = ('name', 'created_on')
         search_fields = ('name__icontains',)
+        permission = None
 
-        def get_queryset(self, **kwargs):
-            qs = super(ArtistCRUDL.List, self).get_queryset(**kwargs)
-            return qs
+        def get_queryset(self, *args, **kwargs):
+            queryset = None
+            cacheResult = False
+
+            if not self.request.REQUEST.keys():
+                queryset = cache.get('artist_list')
+                cacheResult = True
+
+            if not queryset:
+                queryset = super(ArtistCRUDL.List, self).get_queryset(*args, **kwargs)
+                queryset = queryset.prefetch_related('albums')
+
+                if cacheResult:
+                    cache.set('artist_list', queryset[:25], 3600)
+
+            return queryset
 
 class TrackCRUDL(SmartCRUDL):
     model = Track
@@ -37,6 +50,7 @@ class TrackCRUDL(SmartCRUDL):
             
             # clear our cache
             queryset = cache.delete('track_list')
+            queryset = cache.delete('artist_list')
             return obj
 
     class List(SmartListView):

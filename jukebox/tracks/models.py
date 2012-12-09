@@ -15,6 +15,12 @@ class Artist(SmartModel):
     name = models.CharField(max_length=64, unique=True,
                             help_text="The name of this artist")
 
+    def cover(self):
+        for album in self.albums.all():
+            if album.cover:
+                return album.cover
+        return None
+
     def __unicode__(self):
         return self.name
 
