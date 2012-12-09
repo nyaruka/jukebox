@@ -15,6 +15,7 @@ class RequestCRUDL(SmartCRUDL):
             return Request.objects.filter(status__in= ["P","Q"]).order_by('created_on')
 
     class List(SmartListView):
+        permission = None
         title = "Playlist"
         paginate_by = 25
         select_related = ('track__name', 'track__album__cover', 'track__album__name', 

@@ -44,26 +44,16 @@
         <div class="nav-collapse">
 
         <ul class="nav">
-          {% if perms.tracks.artist_list %}
           <li><a href="{% url tracks.artist_list %}">Artists</a></li>
-          {% endif %}
-
-          {% if perms.tracks.track_list %}
           <li><a href="{% url tracks.track_list %}">Tracks</a></li>
-          {% endif %}
 
-          {% if perms.message.message_list %}
+          {% if request.user.is_superuser %}
           <li><a href="{% url console.message_list %}">Console</a></li>
-          {% endif %}
-
-          {% if perms.nsms.text_list %}
-          <li class="dropdown">
+           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Configuration<b class="caret"></b></a>
             <ul class="dropdown-menu">
-              {% if perms.auth.user_list %}
-              <li><a href="/users/user/">Users</a></li>
-              {% endif %}
-            </ul>
+               <li><a href="/users/user/">Users</a></li>
+             </ul>
           </li>
           {% endif %}
         </ul>

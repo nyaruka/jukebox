@@ -5,6 +5,7 @@ from django.core.cache import cache
 class ArtistCRUDL(SmartCRUDL):
     model = Artist
     actions = ('list', 'read', 'update')
+    permission = None
 
     class List(SmartListView):
         fields = ('name', 'created_on')
@@ -44,6 +45,7 @@ class TrackCRUDL(SmartCRUDL):
         default_order = ('-created_on',)
         select_related = ('album__name', 'album__artist__name', 'album__cover')
         paginate_by = 60
+        permission = None
 
         def lookup_field_link(self, context, field, obj):
             return reverse("tracks.artist_read", args=[obj.album.artist.id])
