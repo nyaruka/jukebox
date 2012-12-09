@@ -8,6 +8,6 @@ config = dict(
     db='jukebox',
     db_user='jukebox',
     db_host='localhost',
-    server_db_host='localhost',
+    prod_db_host='localhost',
     custom_domains='jukebox.klab.rw',
     celery=False)
