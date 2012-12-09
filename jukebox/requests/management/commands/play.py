@@ -8,12 +8,15 @@ import sys
 import os
 from time import sleep
 from django.contrib.auth.models import User
+import redis
 
 class Command(BaseCommand):
     option_list = BaseCommand.option_list
     
     def handle(self, *args, **options):
         user = User.get_anonymous()
+        r = redis.StrictRedis(host='localhost', port=6379, db=1)
+
         while(True):
             try:
                 playlist = Request.objects.filter(status='Q').order_by('created_on')
@@ -22,6 +25,12 @@ class Command(BaseCommand):
                     request.status = 'P'
                     request.played_on = datetime.datetime.now()
                     request.save()
+
+                    # clear our request cache
+                    r.delete(":1:request_list")
+
+                    # and our now playing
+                    r.delete(":1:playlist")
                     
                     try:                            
                         call(["mpg123", request.track.mp3_file.path])
