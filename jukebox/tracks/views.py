@@ -1,5 +1,6 @@
 from smartmin.views import *
 from .models import *
+from django.core.cache import cache
 
 class ArtistCRUDL(SmartCRUDL):
     model = Artist
@@ -32,6 +33,9 @@ class TrackCRUDL(SmartCRUDL):
         def post_save(self, obj):
             obj = super(TrackCRUDL.Create, self).post_save(obj)
             obj.album.find_album_art(obj.name)
+            
+            # clear our cache
+            queryset = cache.delete('track_list')
             return obj
 
     class List(SmartListView):
@@ -43,6 +47,22 @@ class TrackCRUDL(SmartCRUDL):
 
         def lookup_field_link(self, context, field, obj):
             return reverse("tracks.artist_read", args=[obj.album.artist.id])
+
+        def get_queryset(self, *args, **kwargs):
+            queryset = None
+            cacheResult = False
+
+            if not self.request.REQUEST.keys():
+                queryset = cache.get('track_list')
+                cacheResult = True
+
+            if not queryset:
+                queryset = super(TrackCRUDL.List, self).get_queryset(*args, **kwargs)
+
+                if cacheResult:
+                    cache.set('track_list', queryset[:25], 3600)
+
+            return queryset
 
         def derive_queryset(self, **kwargs):
             queryset = super(TrackCRUDL.List, self).derive_queryset(**kwargs)

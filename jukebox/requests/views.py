@@ -1,6 +1,7 @@
 from django.db.models import Count
 from smartmin.views import *
 from .models import *
+from django.core.cache import cache
 
 class RequestCRUDL(SmartCRUDL):
     model = Request
@@ -23,12 +24,31 @@ class RequestCRUDL(SmartCRUDL):
         field_config = { 'track': dict(label="Song"),
                          'created_by': dict(label="Requested By") }
 
+        def get_queryset(self, *args, **kwargs):
+            queryset = None
+            cacheResult = False
+
+            if not self.request.REQUEST.keys():
+                queryset = cache.get('request_list')
+                cacheResult = True
+
+            if not queryset:
+                queryset = super(RequestCRUDL.List, self).get_queryset(*args, **kwargs)
+                if cacheResult:
+                    cache.set('request_list', queryset[:25], 3600)
+            return queryset
+
         def get_status(self, obj):
             return obj.get_status_display()
 
     class New(SmartCreateView):
         fields = ('track',)
         success_url = '@requests.request_list'
+
+        def post_save(self, obj):
+            obj = super(RequestCRUDL.New, self).post_save(obj)
+            queryset = cache.delete('request_list')
+            return obj
 
     class Radio(SmartListView):
         def get_queryset(self, **kwargs):
