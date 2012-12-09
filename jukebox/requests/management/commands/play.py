@@ -13,6 +13,7 @@ class Command(BaseCommand):
     option_list = BaseCommand.option_list
     
     def handle(self, *args, **options):
+        user = User.get_anonymous()
         while(True):
             try:
                 playlist = Request.objects.filter(status='Q').order_by('created_on')
