@@ -15,7 +15,6 @@ class RequestCRUDL(SmartCRUDL):
 
     class List(SmartListView):
         title = "Playlist"
-        refresh = 30000
         paginate_by = 25
         select_related = ('track__name', 'track__album__cover', 'track__album__name', 
                           'track__album__artist__name', 'created_by__first_name', 'created_by__last_name')

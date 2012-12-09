@@ -1,1 +1,1 @@
-settings.py.prod
+settings.py.mysql
