@@ -52,8 +52,6 @@ class Command(BaseCommand):
                         window = datetime.datetime.now() - datetime.timedelta(hours=6)
                         requests = requests.exclude(track_id__in=[t.track_id for t in Request.objects.filter(created_on__gt=window)])
 
-                        self.stdout.write("Considering %d requests before %s" % (requests.count(), window))
-
                         if requests:
                             requests = requests.order_by('?')
                             Request.objects.create(track=requests[0].track,

@@ -17,20 +17,12 @@ class RequestCRUDL(SmartCRUDL):
         title = "Playlist"
         refresh = 30000
         paginate_by = 25
+        select_related = ('track__name', 'track__album__cover', 'track__album__name', 
+                          'track__album__artist__name', 'created_by__first_name', 'created_by__last_name')
         default_order = ('-created_on',)
         fields = ('track', 'status', 'created_by', 'created_on')
         field_config = { 'track': dict(label="Song"),
                          'created_by': dict(label="Requested By") }
-
-        def get_context_data(self, **kwargs):
-            context = super(RequestCRUDL.List, self).get_context_data(**kwargs)
-
-            top_requests = Request.objects.exclude(created_by=settings.ANONYMOUS_USER_ID).values(
-                'track', 'track__album__artist', 'track__album', 'track__name', 'track__album__artist__name',
-                'track__album__name', 'track__album__cover').annotate(requested=Count('track',)).filter(requested__gt=1).order_by('-requested')[:25]
-
-            context['top_requests'] = top_requests
-            return context
 
         def get_status(self, obj):
             return obj.get_status_display()

@@ -38,6 +38,7 @@ class TrackCRUDL(SmartCRUDL):
         fields = ('name', 'artist', 'length', 'genre', 'album', 'request')
         search_fields = ('name__icontains', 'album__artist__name__icontains')
         default_order = ('-created_on',)
+        select_related = ('album__name', 'album__artist__name', 'album__cover')
         paginate_by = 60
 
         def lookup_field_link(self, context, field, obj):
