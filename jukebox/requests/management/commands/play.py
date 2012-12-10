@@ -22,15 +22,15 @@ class Command(BaseCommand):
             try:
                 playlist = Request.objects.filter(status='Q').order_by('created_on')
                 
-                for request in playlist:
+                for index, request in enumerate(playlist):
                     request.status = 'P'
                     request.played_on = datetime.datetime.now()
                     request.save()
 
                     try:                            
                         r.set('now_playing', pickle.dumps(request.as_dict(), -1))
-                        if len(playlist) > 1:
-                            r.set('next_up', pickle.dumps(playlist[1].as_dict(), -1))
+                        if index+1 < len(playlist):
+                            r.set('next_up', pickle.dumps(playlist[index+1].as_dict(), -1))
                         else:
                             r.delete('next_up')
 
