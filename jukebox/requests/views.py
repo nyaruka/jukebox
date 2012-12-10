@@ -1,6 +1,27 @@
 from django.db.models import Count
 from smartmin.views import *
 from .models import *
+from django import forms
+from tracks.models import *
+from django.shortcuts import redirect
+
+class RequestForm(forms.ModelForm):
+    tracks = Track.objects.filter(is_active=True).exclude(name='')
+
+    track = forms.ModelChoiceField(tracks)
+
+    def clean(self):
+        cleaned_data = super(RequestForm, self).clean()
+        cleaned_data['on_list'] = False
+        data = cleaned_data['track']
+        on_queue = Request.objects.filter(track=data, status__in=['Q', 'P'])
+        if on_queue:
+            cleaned_data['on_list'] = True
+        return cleaned_data
+
+    class Meta:
+        model = Request
+        
 
 class RequestCRUDL(SmartCRUDL):
     model = Request
@@ -38,6 +59,13 @@ class RequestCRUDL(SmartCRUDL):
     class New(SmartCreateView):
         fields = ('track',)
         success_url = '@requests.request_list'
+        form_class = RequestForm
+
+        def form_valid(self, form):
+            if form.cleaned_data['on_list'] == True:
+                return redirect(reverse('requests.request_list'))
+            else:
+                return super(RequestCRUDL.New, self).form_valid(form)
 
     class Radio(SmartListView):
         def get_queryset(self, **kwargs):
