@@ -3,6 +3,7 @@ from smartmin.models import SmartModel
 from tracks.models import *
 import datetime
 import time
+import pickle
 
 class Request(SmartModel):
     STATUS_CHOICES = (('Q', "Queued"),
@@ -36,6 +37,29 @@ class Request(SmartModel):
     def __unicode__(self):
 	return "[%s] %s" % (self.status, self.track.name)
 
+    def as_dict(self):
+        album = None
+        if self.track.album:
+            album = dict(id=self.track.album.id,
+                         name=self.track.album.name,
+                         cover=self.track.album.cover,
+                         artist=dict(id=self.track.album.artist.id,
+                                     name=self.track.album.artist.name))
+
+            if self.track.album.cover:
+                album['cover'] = self.track.album.cover.path
+            else:
+                album['cover'] = None
+
+        return dict(id=self.id,
+                    created_on=self.created_on,
+                    created_by=dict(id=self.created_by.id,
+                                    username=self.created_by.username,
+                                    first_name=self.created_by.first_name,
+                                    last_name=self.created_by.last_name),
+                    track=dict(id=self.track.id,
+                               name=self.track.name,
+                               album=album))
 
 class Vote(SmartModel):
     request = models.ForeignKey(Request,

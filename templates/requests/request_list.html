@@ -21,19 +21,20 @@
                         </div>
 
                         <div class="track-artist">
-                            <a href="{% url tracks.artist_read r.track.album.artist_id%}">{{ r.track.album.artist }}</a>
+                          {% if r.track.album %}
+                          <a href="{% url tracks.artist_read r.track.album.artist.id%}">{{ r.track.album.artist.name }}</a>
+                          {% endif %}
                         </div>
-                          {% if r.created_by_id != -1 %}
+                          {% if r.created_by.id != -1 %}
                               <div class="requested-by">
                               Requested by
                                   {% if r.created_by.first_name %}
                                       {{ r.created_by.first_name }}
                                   {% else %}
-
                                       {% if "android" in r.created_by.username %}
                                           SMS
                                       {% else %}
-                                          {{ r.created_by }}
+                                          {{ r.created_by.first_name }} {{ r.created_by.last_name }}
                                       {% endif %}
 
                                   {% endif %}

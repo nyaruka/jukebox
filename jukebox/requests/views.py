@@ -5,6 +5,8 @@ from django.core.cache import cache
 from django import forms
 from tracks.models import *
 from django.shortcuts import redirect
+import cPickle as pickle
+import json
 
 class RequestForm(forms.ModelForm):
     tracks = Track.objects.filter(is_active=True).exclude(name='')
@@ -48,16 +50,22 @@ class RequestCRUDL(SmartCRUDL):
         def get_queryset(self, *args, **kwargs):
             queryset = None
             cacheResult = False
+            
+            # grab our redis client connection
+            redis = cache.client.client
 
-            if not self.request.REQUEST.keys():
-                queryset = cache.get('request_list')
-                cacheResult = True
+            if not redis.exists('requests'):
+                print "generating"
 
-            if not queryset:
                 queryset = super(RequestCRUDL.List, self).get_queryset(*args, **kwargs)
-                if cacheResult:
-                    cache.set('request_list', queryset[:25], 3600)
-            return queryset
+                result = []
+                for request in list(queryset[:100]):
+                    result.append(request.as_dict())
+                    redis.rpush('requests', pickle.dumps(request.as_dict(), -1))
+            else:
+                result = [pickle.loads(_) for _ in redis.lrange('requests', 0, 100)]
+
+            return result
 
         def get_status(self, obj):
             return obj.get_status_display()
@@ -75,7 +83,7 @@ class RequestCRUDL(SmartCRUDL):
 
         def post_save(self, obj):
             obj = super(RequestCRUDL.New, self).post_save(obj)
-            queryset = cache.delete('request_list')
+            cache.client.client.lpush('requests', pickle.dumps(obj.as_dict(), -1))
             queryset = cache.delete('playlist')
             return obj
 

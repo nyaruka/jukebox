@@ -9,6 +9,7 @@ import os
 from time import sleep
 from django.contrib.auth.models import User
 import redis
+import cPickle as pickle
 
 class Command(BaseCommand):
     option_list = BaseCommand.option_list
@@ -25,9 +26,6 @@ class Command(BaseCommand):
                     request.status = 'P'
                     request.played_on = datetime.datetime.now()
                     request.save()
-
-                    # clear our request cache
-                    r.delete(":1:request_list")
 
                     # and our now playing
                     r.delete(":1:playlist")
@@ -55,10 +53,11 @@ class Command(BaseCommand):
 
                     if requests:
                         requests = requests.order_by('?')
-                        Request.objects.create(track=requests[0].track,
-                                               created_by=user,
-                                               modified_by=user,
-                                               played_on=None)
+                        request = Request.objects.create(track=requests[0].track,
+                                                         created_by=user,
+                                                         modified_by=user,
+                                                         played_on=None)
+                        cache.client.client.lpush('requests', pickle.dumps(request.as_dict(), -1))
                         
                     # for the bug of tracks stucking on the playing status because of an unxpected system halt 
                     request_completed = Request.objects.filter(status='P').order_by('created_on')

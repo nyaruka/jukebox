@@ -44,7 +44,7 @@ CACHES = {
         'BACKEND': 'redis_cache.cache.RedisCache',
         'LOCATION': 'localhost:6379:1',
         'OPTIONS': {
-            "CLIENT_CLASS": "redis_cache.client.DefaultClient",
+	    'PARSER_CLASS': 'redis.connection.HiredisParser',
             'DB': 1,
         },
     },
