@@ -148,6 +148,9 @@ class Track(SmartModel):
     def down_votes(self):
         return self.votes.filter(score=-1)
 
+    def user_requests(self):
+        return self.requests.exclude(created_by_id=-1)
+
     def update_from_file(self, mp3_file):
         """
         Creates a new Track, Album and Artist from the given mp3 file.  You will be returned
