@@ -12,28 +12,24 @@
 <div class="row">
   <div class="span12">
 
-<div class="track-list">
-{% for track in track_list %}
-<div class="playlist-item">
-  <a onclick='javascript:playTrack("{% url requests.request_new %}?track={{ track.id }}")'>
+<div class="artist-list">
+{% for artist in artist_list %}
+<div class="artist-item">
+  <a href="{% url tracks.artist_read artist.id %}">
   <div class="track-cover" style="position:relative;">
-    {% if track.album.cover %}
-    {% thumbnail track.album.cover "120" crop="center" as im %}
+    {% if artist.cover %}
+    {% thumbnail artist.cover "120" crop="center" as im %}
     <img class="cover" src="{{ im.url }}" width="120px" height="120px"/>
     {% endthumbnail %}
     {% else %}
     <img class="cover" src="{{ STATIC_URL }}/img/missing.png" width="120px" height="120px"/>
     {% endif %}
-    <img class="play-button" src="{{ STATIC_URL }}img/play.png">
   </div>
   </a>
 
-  <div class="track-info">
-    <div class="track-name">
-     {{ track.name|truncatewords:"4" }}
-    </div>
-    <div class="track-artist">
-      <a href="{% url tracks.artist_read track.album.artist_id%}">{{ track.album.artist|truncatewords:"4" }}</a>
+  <div class="artist-info">
+    <div class="artist-name">
+      {{ artist.name }}
     </div>
   </div>
 </div>
@@ -61,12 +57,25 @@ html, body {
   color: #f6f6f6;
 }
 
-.playlist-item {
+.artist-item {
   margin-bottom: 20px;
   width: 200px;
 }
 
-.track-info {
+.artist-item .track-cover {
+  float: left;
+  margin-right: 20px;
+}
+
+.artist-name {
+  margin-top: 5px;
+  font-weight: 100;
+  font-size: 22px;
+  letter-spacing: .1em;
+  line-height: 22px;
+}
+
+.artist-info {
   margin-top: 10px;
   background-color: #222;
   margin-right: 10px;
@@ -76,46 +85,26 @@ html, body {
   border: 1px solid #151515;
 }
 
-.track-list .track-name {
+.artist-list .artist-name {
   font-size: 18px;
   line-height: 17px;
 }
 
-.track-list .track-artist {
-  font-weight: 200;
-}
-
-.track-list .track-cover img.play-button {
-  position:absolute;
-  top:30px;
-  left:30px;
-  width:60px;
-  height:60px;
-  opacity: 0;
-  transition: opacity .25s ease-in-out;
-  -moz-transition: opacity .25s ease-in-out;
-  -webkit-transition: opacity .25s ease-in-out;
-}
-
-.track-list .playlist-item .track-cover:hover img.play-button {
-  opacity: 1;
-}
-
-.track-list {
+.artist-list {
   padding-top: 30px;
 }
 
-.track-list .playlist-item {
+.artist-list .artist-item {
   float: left;
   width: 310px;
 }
 
-.track-list .track-cover img {
+.artist-list .track-cover img {
   width: 120px;
   height: 120px;
 }
 
-.track-list .track-cover {
+.artist-list .track-cover {
   width: 120px;
   cursor: pointer;
 }
@@ -126,23 +115,11 @@ html, body {
 {{ block.super }}
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.infinitescroll.min.js"></script>
 <script>
-  function playTrack(href){
-    var url = $.url(href);
-
-    $("#posterizer").attr("action", url.attr("path"));
-
-    for (var key in url.param()){
-      $("#posterizer").append("<input type='hidden' name='" + key + "' value='" + url.param(key) + "'></input>");
-    }
-
-    $("#posterizer").submit();
-  }
-
   $(function(){
     $(".track-list").infinitescroll({
       navSelector  : "div.pagination",            
       nextSelector : "div.pagination a.next",    
-      itemSelector : "div.playlist-item",
+      itemSelector : "div.artist-item",
       bufferPx     : 100,
       donetext     : "No more requests.",
       loadingText  : "Loading more requests..."

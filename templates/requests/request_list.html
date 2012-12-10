@@ -2,11 +2,9 @@
 
 {% block content %}
     {% load thumbnail %}
-
-        <div class="span9">
-
+        <div class="span9 playlist-items">
             {% for r in object_list %}
-                <div class="row playlist-item {% if r.status == 'P' %}playing{% endif %}">
+                <div class="row playlist-item {% if r.track == now_playing.track %}playing{% endif %}">
 
                         <div class="track-cover">
                         {% if r.track.album.cover %}
@@ -17,7 +15,6 @@
                             <img src="{{ STATIC_URL }}/img/missing.png" width="100%"/>
                         {% endif %}
                         </div>
-
 
                         <div class="track-name">
                             {{ r.track.name }}
@@ -47,7 +44,7 @@
 
                       {% endif %}
 
-                    {% if r.status == 'P' %}
+                    {% if r.track == now_playing.track %}
                         <div class="now-playing">
                             <img src="{{ STATIC_URL }}img/now_playing_normal.gif"/>
                             <p>Now Playing</p>
@@ -59,40 +56,30 @@
 
         </div>
 
-        <!-- 
+  <div class="pagination">
+    {% if page_obj.has_next %}
+    <a class="next" href="{{url_params|safe}}page={{page_obj.next_page_number}}">Next &rarr;</a>
+    {% endif %}
+  </div>
 
-        <div class="top-request-list span5 pull-right">
-            <div class="row">
-                <div class="span5">
-                    <div class="subtitle">Top 25 Requests</div>
-                </div>
-            </div>
-            {% for r in top_requests %}
-                <div class="top-request row">
-                    <div class="span1">
-                        <div class="track-cover">
-                            {% thumbnail  r.track__album__cover "250" crop="center" as im %}
-                                <img src="{{ im.url }}" width="100%"/>
-                            {% endthumbnail %}
-                        </div>
-                        <div class="span1 track-rank">{{ forloop.counter }}</div>
-                    </div>
-                    <div class="span3 track-details">
-                        <div class="track-name">{{ r.track__name}}</div>
-                        <div class="track-artist"><a href="{% url tracks.artist_read r.track__album__artist %}">{{ r.track__album__artist__name }}</a></div>
-                        <div class="track-requested">Requested {{r.requested}} times</div>
-                        <div class="track-request-button"><a class="btn btn-mini posterize" href="{% url requests.request_new %}?track={{ r.track }}">Request</a></div>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
+{% endblock %}
 
-        -->
+{% block extra-script %}
+{{ block.super }}
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.infinitescroll.min.js"></script>
+<script>
+  $(function(){
+    $(".playlist-items").infinitescroll({
+      navSelector  : "div.pagination",            
+      nextSelector : "div.pagination a.next",    
+      itemSelector : "div.playlist-item",
+      bufferPx     : 100,
+      donetext     : "No more requests.",
+      loadingText  : "Loading more requests..."
+    });
+  });
+</script>
+{% endblock %}
 
-    <div class="row">
-        {% block paginator %}
-            {{ block.super }}
-        {% endblock %}
-    </div>
-
+{% block footer %}
 {% endblock %}

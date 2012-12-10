@@ -15,6 +15,12 @@ class Artist(SmartModel):
     name = models.CharField(max_length=64, unique=True,
                             help_text="The name of this artist")
 
+    def cover(self):
+        for album in self.albums.all():
+            if album.cover:
+                return album.cover
+        return None
+
     def __unicode__(self):
         return self.name
 
@@ -134,6 +140,13 @@ class Track(SmartModel):
                               help_text="What album this track belongs to")
     mp3_file = models.FileField(upload_to="mp3s",
                                 help_text="The mp3 file that contains the music")
+
+
+    def up_votes(self):
+        return self.votes.filter(score=1)
+
+    def down_votes(self):
+        return self.votes.filter(score=-1)
 
     def update_from_file(self, mp3_file):
         """

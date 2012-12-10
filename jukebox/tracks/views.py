@@ -1,5 +1,6 @@
 from smartmin.views import *
 from .models import *
+from django.core.cache import cache
 
 class ArtistCRUDL(SmartCRUDL):
     model = Artist
@@ -8,10 +9,24 @@ class ArtistCRUDL(SmartCRUDL):
     class List(SmartListView):
         fields = ('name', 'created_on')
         search_fields = ('name__icontains',)
+        permission = None
 
-        def get_queryset(self, **kwargs):
-            qs = super(ArtistCRUDL.List, self).get_queryset(**kwargs)
-            return qs
+        def get_queryset(self, *args, **kwargs):
+            queryset = None
+            cacheResult = False
+
+            if not self.request.REQUEST.keys():
+                queryset = cache.get('artist_list')
+                cacheResult = True
+
+            if not queryset:
+                queryset = super(ArtistCRUDL.List, self).get_queryset(*args, **kwargs)
+                queryset = queryset.prefetch_related('albums')
+
+                if cacheResult:
+                    cache.set('artist_list', queryset[:25], 3600)
+
+            return queryset
 
 class TrackCRUDL(SmartCRUDL):
     model = Track
@@ -32,16 +47,38 @@ class TrackCRUDL(SmartCRUDL):
         def post_save(self, obj):
             obj = super(TrackCRUDL.Create, self).post_save(obj)
             obj.album.find_album_art(obj.name)
+            
+            # clear our cache
+            queryset = cache.delete('track_list')
+            queryset = cache.delete('artist_list')
             return obj
 
     class List(SmartListView):
         fields = ('name', 'artist', 'length', 'genre', 'album', 'request')
         search_fields = ('name__icontains', 'album__artist__name__icontains')
         default_order = ('-created_on',)
+        select_related = ('album__name', 'album__artist__name', 'album__cover')
         paginate_by = 60
+        permission = None
 
         def lookup_field_link(self, context, field, obj):
             return reverse("tracks.artist_read", args=[obj.album.artist.id])
+
+        def get_queryset(self, *args, **kwargs):
+            queryset = None
+            cacheResult = False
+
+            if not self.request.REQUEST.keys():
+                queryset = cache.get('track_list')
+                cacheResult = True
+
+            if not queryset:
+                queryset = super(TrackCRUDL.List, self).get_queryset(*args, **kwargs)
+
+                if cacheResult:
+                    cache.set('track_list', queryset[:25], 3600)
+
+            return queryset
 
         def derive_queryset(self, **kwargs):
             queryset = super(TrackCRUDL.List, self).derive_queryset(**kwargs)
