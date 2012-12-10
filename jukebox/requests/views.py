@@ -48,20 +48,20 @@ class RequestCRUDL(SmartCRUDL):
                          'created_by': dict(label="Requested By") }
 
         def get_queryset(self, *args, **kwargs):
-            queryset = None
-            cacheResult = False
-            
             # grab our redis client connection
             redis = cache.client.client
 
-            if not redis.exists('requests'):
-                queryset = super(RequestCRUDL.List, self).get_queryset(*args, **kwargs)
-                result = []
-                for request in list(queryset[:100]):
-                    result.append(request.as_dict())
-                    redis.rpush('requests', pickle.dumps(request.as_dict(), -1))
+            if not self.request.REQUEST.keys():
+                if not redis.exists('requests'):
+                    queryset = super(RequestCRUDL.List, self).get_queryset(*args, **kwargs)
+                    result = []
+                    for request in list(queryset[:25]):
+                        result.append(request.as_dict())
+                        redis.rpush('requests', pickle.dumps(request.as_dict(), -1))
+                else:
+                    result = [pickle.loads(_) for _ in redis.lrange('requests', 0, 25)]
             else:
-                result = [pickle.loads(_) for _ in redis.lrange('requests', 0, 100)]
+                result = super(RequestCRUDL.List, self).get_queryset(*args, **kwargs)
 
             return result
 

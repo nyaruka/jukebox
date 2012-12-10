@@ -1,6 +1,7 @@
 from smartmin.views import *
 from .models import *
 from django.core.cache import cache
+import time
 
 class ArtistCRUDL(SmartCRUDL):
     model = Artist
@@ -25,7 +26,7 @@ class ArtistCRUDL(SmartCRUDL):
                 queryset = queryset.prefetch_related('albums')
 
                 if cacheResult:
-                    cache.set('artist_list', queryset[:60], 3600)
+                    cache.set('artist_list', queryset[:60])
 
             return queryset
 
@@ -77,7 +78,7 @@ class TrackCRUDL(SmartCRUDL):
                 queryset = super(TrackCRUDL.List, self).get_queryset(*args, **kwargs)
 
                 if cacheResult:
-                    cache.set('track_list', queryset[:60], 3600)
+                    cache.set('track_list', queryset[:60])
 
             return queryset
 

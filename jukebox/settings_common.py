@@ -120,7 +120,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'cached_auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.locale.LocaleMiddleware'
 )
@@ -149,17 +149,8 @@ INSTALLED_APPS = (
     # mo-betta permission management
     'guardian',
 
-    # error logging
-    'raven.contrib.django',
-
-    # versioning of our data
-    'reversion',
-
     # the django admin
     'django.contrib.admin',
-
-    # debug!
-    'debug_toolbar',
 
     # compress our CSS and js
     'compressor',
@@ -173,9 +164,6 @@ INSTALLED_APPS = (
     'modeltranslation',
 
     'django_quickblocks',
-
-    # async tasks,
-    #'djcelery',
 
     # user management
     'smartmin.users',
@@ -191,9 +179,6 @@ INSTALLED_APPS = (
 
     # requests
     'requests',
-
-    # 'users',
-
     'sorl.thumbnail',
 )
 
