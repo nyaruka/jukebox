@@ -55,8 +55,6 @@ class RequestCRUDL(SmartCRUDL):
             redis = cache.client.client
 
             if not redis.exists('requests'):
-                print "generating"
-
                 queryset = super(RequestCRUDL.List, self).get_queryset(*args, **kwargs)
                 result = []
                 for request in list(queryset[:100]):
@@ -83,8 +81,14 @@ class RequestCRUDL(SmartCRUDL):
 
         def post_save(self, obj):
             obj = super(RequestCRUDL.New, self).post_save(obj)
-            cache.client.client.lpush('requests', pickle.dumps(obj.as_dict(), -1))
-            queryset = cache.delete('playlist')
+            obj_dict = obj.as_dict()
+
+            cache.client.client.lpush('requests', pickle.dumps(obj_dict, -1))
+
+            # if there is no next up track, set it
+            if not cache.client.client.get('next_up'):
+                cache.client.client.set('next_up', pickle.dumps(obj_dict, -1))                
+
             return obj
 
     class Radio(SmartListView):

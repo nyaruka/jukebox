@@ -27,10 +27,13 @@ class Command(BaseCommand):
                     request.played_on = datetime.datetime.now()
                     request.save()
 
-                    # and our now playing
-                    r.delete(":1:playlist")
-                    
                     try:                            
+                        cache.client.client.set('now_playing', pickle.dumps(request.as_dict(), -1))
+                        if len(playlist) > 1:
+                            cache.client.client.set('next_up', pickle.dumps(playlist[1].as_dict(), -1))
+                        else:
+                            cache.client.client.delete('next_up')
+
                         call(["mpg123", request.track.mp3_file.path])
                     except:
                         import traceback
@@ -58,6 +61,7 @@ class Command(BaseCommand):
                                                          modified_by=user,
                                                          played_on=None)
                         cache.client.client.lpush('requests', pickle.dumps(request.as_dict(), -1))
+                        cache.client.client.ltrim('requests', 0, 100)
                         
                     # for the bug of tracks stucking on the playing status because of an unxpected system halt 
                     request_completed = Request.objects.filter(status='P').order_by('created_on')

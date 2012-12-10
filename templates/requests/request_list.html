@@ -4,7 +4,7 @@
     {% load thumbnail %}
         <div class="span9 playlist-items">
             {% for r in object_list %}
-                <div class="row playlist-item {% if r.track == now_playing.track %}playing{% endif %}">
+                <div class="row playlist-item {% if r.track.id == now_playing.track.id %}playing{% endif %}">
 
                         <div class="track-cover">
                         {% if r.track.album.cover %}
@@ -45,7 +45,7 @@
 
                       {% endif %}
 
-                    {% if r.track == now_playing.track %}
+                    {% if r.track.id == now_playing.track.id %}
                         <div class="now-playing">
                             <img src="{{ STATIC_URL }}img/now_playing_normal.gif"/>
                             <p>Now Playing</p>
