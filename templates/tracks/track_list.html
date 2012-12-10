@@ -41,7 +41,7 @@
 </div>
 
 <div class="pagination">
-  {% if page_obj.has_next %}
+  {% if page_obj.has_next or page_obj.number == 1 %}
   <a class="next" href="{{url_params|safe}}page={{page_obj.next_page_number}}">Next &rarr;</a>
   {% endif %}
 </div>

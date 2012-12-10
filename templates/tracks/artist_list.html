@@ -37,7 +37,7 @@
 </div>
 
 <div class="pagination">
-  {% if page_obj.has_next %}
+  {% if page_obj.has_next or page_obj.number == 1 %}
   <a class="next" href="{{url_params|safe}}page={{page_obj.next_page_number}}">Next &rarr;</a>
   {% endif %}
 </div>
@@ -116,7 +116,7 @@ html, body {
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.infinitescroll.min.js"></script>
 <script>
   $(function(){
-    $(".track-list").infinitescroll({
+    $(".artist-list").infinitescroll({
       navSelector  : "div.pagination",            
       nextSelector : "div.pagination a.next",    
       itemSelector : "div.artist-item",

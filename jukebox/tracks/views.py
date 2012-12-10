@@ -5,6 +5,7 @@ from django.core.cache import cache
 class ArtistCRUDL(SmartCRUDL):
     model = Artist
     actions = ('list', 'read', 'update')
+    paginate_by = 60
 
     class List(SmartListView):
         fields = ('name', 'created_on')
@@ -24,7 +25,7 @@ class ArtistCRUDL(SmartCRUDL):
                 queryset = queryset.prefetch_related('albums')
 
                 if cacheResult:
-                    cache.set('artist_list', queryset[:25], 3600)
+                    cache.set('artist_list', queryset[:60], 3600)
 
             return queryset
 
@@ -76,7 +77,7 @@ class TrackCRUDL(SmartCRUDL):
                 queryset = super(TrackCRUDL.List, self).get_queryset(*args, **kwargs)
 
                 if cacheResult:
-                    cache.set('track_list', queryset[:25], 3600)
+                    cache.set('track_list', queryset[:60], 3600)
 
             return queryset
 

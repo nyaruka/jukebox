@@ -76,6 +76,7 @@ class RequestCRUDL(SmartCRUDL):
         def post_save(self, obj):
             obj = super(RequestCRUDL.New, self).post_save(obj)
             queryset = cache.delete('request_list')
+            queryset = cache.delete('playlist')
             return obj
 
     class Radio(SmartListView):
