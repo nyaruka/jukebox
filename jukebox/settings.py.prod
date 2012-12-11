@@ -40,17 +40,6 @@ DATABASES = {
     }
 }
 
-# no debug toolbar in prod
-MIDDLEWARE_CLASSES = (
-    'django.middleware.common.CommonMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'smartmin.middleware.AjaxRedirect',
-    'django.middleware.locale.LocaleMiddleware',
-)
-
 # set this to something secure
 ROUTER_PASSWORD = 'password'
 
