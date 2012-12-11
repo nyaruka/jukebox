@@ -117,7 +117,7 @@
   var now = (new Date).getTime();
 
   if (now < finish){
-    var offset = 1000 * Math.random() * 5 + 3000;
+    var offset = 1000 * Math.random() * 5 + 7000;
     setTimeout(reloadPlaying, finish - now + offset);
   } else {
     setTimeout(reloadPlaying, 15000);
