@@ -57,6 +57,8 @@ ROUTER_PASSWORD = 'password'
 ROUTER_URL = None
 ROUTER_WORKERS = 0
 
+MEDIA_ROOT = '/home/jukebox/media'
+
 ###
 # Redis configuration
 ###
