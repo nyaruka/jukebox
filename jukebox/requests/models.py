@@ -52,6 +52,7 @@ class Request(SmartModel):
                 album['cover'] = None
 
         return dict(id=self.id,
+                    played_on=self.played_on,
                     created_on=self.created_on,
                     created_by=dict(id=self.created_by.id,
                                     username=self.created_by.username,
@@ -59,7 +60,8 @@ class Request(SmartModel):
                                     last_name=self.created_by.last_name),
                     track=dict(id=self.track.id,
                                name=self.track.name,
-                               album=album))
+                               album=album,
+                               length=self.track.length))
 
 class Vote(SmartModel):
     request = models.ForeignKey(Request,

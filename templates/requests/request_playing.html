@@ -1,72 +1,148 @@
-{% extends "smartmin/list.html" %}
+{% if now_playing %}
+{% load thumbnail cache %}
 
+{# cache 600 playing_fragment now_playing.id #}
+<div id="playing_pjax">
+  <div class="banner">
+    <div class="container">
+      <div class="row">
+        <div class="span3">
+          <div class="track-cover">
+          {% if now_playing.track.album.cover %}
+            {% thumbnail now_playing.track.album.cover "220" crop="center" as im %}
+            <img src="{{ im.url }}" width="220" height="220"/>
+            {% endthumbnail %}
+          {% else %}
+          <img src="{{ STATIC_URL }}/img/missing.png" width="200" height="200"/>
+          {% endif %}
+          </div>
+        </div>
+        <div class="span5">
+          <div class="track-name">
+            {{ now_playing.track.name }}
+          </div>
+          <div class="track-artist">
+            <a href="{% url tracks.artist_read now_playing.track.album.artist.id %}">{{ now_playing.track.album.artist.name }}</a>
+          </div>
+          <div class="track-album">
+            {{ now_playing.track.album.name }}
+          </div>
 
-{% block pre-content %}
- <div style="width:500px;margin:50px">
-    <h2>Welcome to Jukebox Web Interface</h2>
-    </br>
-</br>
-</br>
-<a class="btn btn-large btn-block btn-primary" href="{% url tracks.track_list %}"><i class="icon-music icon-white"></i> <em>Browse tracks to request a song</em></a>  |  <a class="btn btn-large btn-block btn-primary" href="{% url tracks.track_create %}"><i class="icon-upload icon-white"></i> <em>Upload a track to jukebox</em> </a> 
-</br>
-</br>
-</br>
-   
-<h3>You can also use sms to <em style="font-size:1.4em">0787 047 455</em>:</h3>
-    
-      <ul>
-	<li>Request a song by sending <em style="font-size:1.4em">a title or artiste name</em></li>
-	<li>Upvote on the palying song by sending the word <em style="font-size:1.4em">yay</em></li>
-	<li>Downvote on the playing song by sening the word <em style="font-size:1.4em" >boo</em>
-      </ul>
-    
-</br>
-      
-  </div>
- <div class="page-header"><h2>Playlist</h2></div> 
-{% endblock %}
+          {% if now_playing.created_by.id != -1 %}
+          <div class="requested-by">
+            Requested by
+            {% if now_playing.created_by.first_name %}
+              {{ now_playing.created_by.first_name }}
+            {% else %}
 
-{% block content %}
- 
+            {% if "android" in now_playing.created_by.username %}
+              SMS
+            {% else %}
+              {{ now_playing.created_by.username }}
+            {% endif %}
 
-{% block pjax %}
-<div id="pjax" class="container" >
-  {% for req  in  object_list %}
+            {% endif %}
+            {{ now_playing.created_on|timesince }} ago
+          </div>
+          {% endif %}
 
-  {% if forloop.first %}
-  <div style="width:550px;float:right" class="now-playing">
-    
-    <div>Now Playing</div>
-    <div>{{req.track.name}}</div>
-    <div>{{req.track.album.artist.name}} - {{req.track.album.name}}</div>
-    <img src="{{ MEDIA_URL }}{{ req.track.album.cover }}" width="400" />
-    <div style="height: 10px"></div>
-    <div class="progress progress-striped active" style="width: 400px" >
-      <div class="bar" style="width:{{req.get_progress}}%;"></div>
+      <!-- 
+      {% with now_playing.track.user_requests|length as requested %}
+          <div class="now-playing-stats">
+              <a class="btn btn-small btn-success" href="#"><i class="icon-white icon-arrow-up"></i>{{ now_playing.track.up_votes.all|length }}</a>
+              <a class="btn btn-small btn-danger" href="#"><i class="icon-white icon-arrow-down"></i>{{ now_playing.track.down_votes.all|length }}</a>
+              {{ requested }} request{{ requested|pluralize:",s" }}
+          </div>
+      {% endwith %}
+      -->
+        </div>
+
+        <div class="span4">
+          {% if next_up %}
+          <div class="next-up" style="margin-bottom: 20px">
+            <h6>Next up:</h6>
+            <div class="track-name">
+              {{ next_up.track.name }}
+            </div>
+            <div class="track-artist">
+              {{ next_up.track.album.artist.name }}
+            </div>
+            {% if next_up.created_by_id != -1 %}
+            <div class="requested-by">
+              Requested by
+              {% if next_up.created_by.first_name %}
+                {{ next_up.created_by.first_name }}
+              {% else %}
+                {% if "android" in next_up.created_by.username %}
+                  SMS
+                {% else %}
+                  {{ next_up.created_by.username }}
+                {% endif %}
+              {% endif %}
+            </div>
+            {% endif %}
+          </div>
+          {% endif %}
+
+          <div style="color:#aaa;">
+            <div>
+              <p style="font-weight: 100; font-size: 20px">SMS @ 0787 047 455</p>
+              <p>
+  	          Request by sending a title or artist name<br/>
+	          Upvote by sending the word: yay<br/>
+	          Downvote by sending the word: boo<br/>
+              </p>
+            </div>
+
+            <a class="btn btn-inverse" style="margin-right:10px" href="{% url tracks.track_create %}">Add Music</a>
+            <a class="btn btn-inverse" href="{% url tracks.track_list %}">Request Song</a>
+          </div>
+        </div>
+      </div>
     </div>
-    <div style="width: 400px" >
-      
-      <span  >
-	{{req.get_formatted_elapsed}}
-      </span>
-      <span style="float:right">
-	{{req.track.get_length}}
-      </span>
-      
-    </div>
   </div>
+
+<script>
+  function reloadPlaying(){
+    $.pjax({
+      push: false,
+      url: '{% url requests.request_playing %}',
+      container: '#playing_pjax'
+    });
+  }
+  
+  {% if now_playing.played_on %}
+  var started = {{now_playing.played_on|date:"U"}} * 1000;
+  var finish = started + 1000 * {{ now_playing.track.length }};
+  var now = (new Date).getTime();
+
+  if (now < finish){
+    var offset = 1000 * Math.random() * 5 + 3000;
+    setTimeout(reloadPlaying, finish - now + offset);
+  } else {
+    setTimeout(reloadPlaying, 15000);
+  }
   {% else %}
-  <div style="width: 500px">  
-    <img src="{{ MEDIA_URL }}{{ req.track.album.cover }}" width="50"/>
-    
-    <span>{{req.track.name}}</span></br>
-    <span>{{req.track.album.artist.name}} - {{req.track.album.name}}</span>
-    <hr>
-  </div>
+  setTimeout(reloadPlaying, 15000);
   {% endif %}
-  {% endfor %}
+</script>
+
 </div>
+{# endcache #}
+{% else %}
+<script>
+$(function(){
+  function reloadPlaying(){
+    $.pjax({
+      push: false,
+      url: '{% url requests.request_playing %}',
+      container: '#playing_pjax'
+    });
+  }
+  
+  // nothing is playing, but reload every 15 seconds anyways
+  setTimeout(reloadPlaying, 1500);
+});
+</script>
+{% endif %}
 
-{% endblock pjax %}
-
-{% endblock content %}

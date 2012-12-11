@@ -29,12 +29,9 @@ class RequestCRUDL(SmartCRUDL):
     model = Request
     actions = ('read', 'list', 'new','playing', 'radio')
 
-    class Playing(SmartListView):
-        refresh = 1000
+    class Playing(SmartTemplateView):
         permission = None
-        
-        def get_queryset(self):
-            return Request.objects.filter(status__in= ["P","Q"]).order_by('created_on')
+        template = 'requests/request_playing.html'
 
     class List(SmartListView):
         permission = None
