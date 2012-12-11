@@ -9,5 +9,6 @@ config = dict(
     db_user='jukebox',
     db_host='localhost',
     prod_db_host='localhost',
+    prod_host='jukebox.klab.rw',
     custom_domains='jukebox.klab.rw',
     celery=False)
