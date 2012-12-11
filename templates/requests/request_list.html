@@ -71,12 +71,15 @@
 <script>
   $(function(){
     $(".playlist-items").infinitescroll({
-      navSelector  : "div.pagination",            
-      nextSelector : "div.pagination a.next",    
-      itemSelector : "div.playlist-item",
-      bufferPx     : 100,
-      donetext     : "No more requests.",
-      loadingText  : "Loading more requests..."
+      navSelector: "div.pagination",            
+      nextSelector: "div.pagination a.next",    
+      itemSelector: "div.playlist-item",
+      bufferPx: 100,
+      loading: {                                        
+        img: "{{ STATIC_URL }}img/loading_light.gif",                
+        finishedMsg: "",
+        msgText: ""
+      }
     });
   });
 </script>

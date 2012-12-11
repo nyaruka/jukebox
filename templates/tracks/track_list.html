@@ -144,8 +144,11 @@ html, body {
       nextSelector : "div.pagination a.next",    
       itemSelector : "div.playlist-item",
       bufferPx     : 100,
-      donetext     : "No more requests.",
-      loadingText  : "Loading more requests..."
+      loading: {                       
+        img: "{{ STATIC_URL }}img/loading_dark.gif",
+        finishedMsg: "",
+        msgText: ""
+      }
     });
   });
 </script>
