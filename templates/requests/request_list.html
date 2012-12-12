@@ -3,7 +3,7 @@
 {% block content %}
     {% load thumbnail cache %}
         <div class="span9 playlist-items">
-          {% cache 600 requests_fragment first.id %}
+          {# cache 600 requests_fragment first.id #}
             {% for r in object_list %}
                 <div class="row playlist-item {% if r.track.id == now_playing.track.id %}playing{% endif %}">
 
@@ -55,7 +55,7 @@
 
                 </div>
             {% endfor %}
-           {% endcache %}
+           {# endcache #}
         </div>
 
   <div class="pagination">
