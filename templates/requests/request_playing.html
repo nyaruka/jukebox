@@ -125,7 +125,7 @@
   console.log("{{now_playing.played_on}} vs " + (new Date()));
 
   if (now < finish){
-    var offset = 1000 * Math.random() * 3 + 1000;
+    var offset = 1000 * Math.random() + 3000;
     setTimeout(reloadPlaying, finish - now + offset);
   } else {
     setTimeout(reloadPlaying, 5000);
