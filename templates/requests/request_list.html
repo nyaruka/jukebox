@@ -8,8 +8,8 @@
 
                         <div class="track-cover">
                         {% if r.track.album.cover %}
-                           {% thumbnail r.track.album.cover "350" crop="center" as im %}
-                           <img src="{{ im.url }}" width="100%"/>
+                           {% thumbnail r.track.album.cover "100x100" crop="center" as im %}
+                           <img src="{{ im.url }}" width="100px" height="100px"/>
                            {% endthumbnail %}
                         {% else %}
                             <img src="{{ STATIC_URL }}/img/missing.png" width="100%"/>

@@ -83,8 +83,14 @@ footer {
 
 .playlist-item .track-cover {
     width:100px;
+    height:100px;
     float:left;
     margin-right: 20px;
+}
+
+.playlist-item .track-cover img {
+    width:100px;
+    height:100px;
 }
 
 .top-request-list {
@@ -164,6 +170,7 @@ footer {
     background-color: #333;
     border-bottom: 2px solid #000;
     color: #fff;
+    height:200px;
 }
 
 .banner .row {
