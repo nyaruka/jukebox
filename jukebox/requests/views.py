@@ -44,6 +44,16 @@ class RequestCRUDL(SmartCRUDL):
         field_config = { 'track': dict(label="Song"),
                          'created_by': dict(label="Requested By") }
 
+        def get_context_data(self, *args, **kwargs):
+            context = super(RequestCRUDL.List, self).get_context_data(*args, **kwargs)
+            requests = context['object_list']
+            if requests:
+                context['first'] = requests[0]
+            else:
+                context['first'] = dict(id=-1)
+
+            return context
+
         def get_queryset(self, *args, **kwargs):
             # grab our redis client connection
             redis = cache.client.client
