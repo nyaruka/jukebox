@@ -66,14 +66,7 @@
     {% endif %}
   </div>
 
-</div>
-{% endblock %}
-{% endblock %}
-
-{% block extra-script %}
-{{ block.super }}
-<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.infinitescroll.min.js"></script>
-<script>
+  <script>
   $(function(){
     $(".playlist-items").infinitescroll({
       navSelector: "div.pagination",            
@@ -87,7 +80,16 @@
       }
     });
   });
+  </script>
 
+</div>
+{% endblock %}
+{% endblock %}
+
+{% block extra-script %}
+{{ block.super }}
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.infinitescroll.min.js"></script>
+<script>
   // overloaded on the request list page as we want to reload our list too
   function reloadPlaying(){
     $.pjax({
