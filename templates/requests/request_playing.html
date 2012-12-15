@@ -123,14 +123,6 @@
   </div>
 
 <script>
-  function reloadPlaying(){
-    $.pjax({
-      push: false,
-      url: '{% url requests.request_playing %}',
-      container: '#playing_pjax'
-    });
-  }
-  
   {% if now_playing.played_on %}
   var started = {{now_playing.played_on|date:"U"}} * 1000;
   var finish = started + 1000 * {{ now_playing.track.length }};
@@ -172,14 +164,6 @@
 {% else %}
 <script>
 $(function(){
-  function reloadPlaying(){
-    $.pjax({
-      push: false,
-      url: '{% url requests.request_playing %}',
-      container: '#playing_pjax'
-    });
-  }
-  
   // nothing is playing, but reload every 15 seconds anyways
   setTimeout(reloadPlaying, 1500);
 });

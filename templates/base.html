@@ -76,6 +76,16 @@
     </div>
   </div>
 
+  <script>
+  function reloadPlaying(){
+    $.pjax({
+      push: false,
+      url: '{% url requests.request_playing %}',
+      container: '#playing_pjax'
+    });
+  }
+  </script>
+
   {% include 'requests/request_playing.html' %}
 
 <div class="container">

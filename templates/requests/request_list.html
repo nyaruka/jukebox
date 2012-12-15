@@ -1,6 +1,8 @@
 {%  extends "smartmin/list.html" %}
 
 {% block content %}
+{% block pjax %}
+<div id="pjax">
     {% load thumbnail cache %}
         <div class="span9 playlist-items">
           {# cache 600 requests_fragment first.id #}
@@ -64,6 +66,8 @@
     {% endif %}
   </div>
 
+</div>
+{% endblock %}
 {% endblock %}
 
 {% block extra-script %}
@@ -83,6 +87,21 @@
       }
     });
   });
+
+  // overloaded on the request list page as we want to reload our list too
+  function reloadPlaying(){
+    $.pjax({
+      push: false,
+      url: '{% url requests.request_playing %}',
+      container: '#playing_pjax'
+    });
+
+    $.pjax({
+      push: false,
+      url: '{% url requests.request_list %}?pjax=true',
+      container: '#pjax'
+    });
+  }
 </script>
 {% endblock %}
 

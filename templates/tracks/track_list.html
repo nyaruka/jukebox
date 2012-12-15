@@ -30,10 +30,10 @@
 
   <div class="track-info">
     <div class="track-name">
-     {{ track.name|truncatewords:"4" }}
+     {{ track.name|truncatechars:"45" }}
     </div>
     <div class="track-artist">
-      <a href="{% url tracks.artist_read track.album.artist_id%}">{{ track.album.artist|truncatewords:"4" }}</a>
+      <a href="{% url tracks.artist_read track.album.artist_id%}">{{ track.album.artist|truncatechars:"20" }}</a>
     </div>
   </div>
 </div>
@@ -79,10 +79,12 @@ html, body {
 .track-list .track-name {
   font-size: 18px;
   line-height: 17px;
+  word-break: break-all
 }
 
 .track-list .track-artist {
   font-weight: 200;
+  word-break: break-all
 }
 
 .track-list .track-cover img.play-button {
