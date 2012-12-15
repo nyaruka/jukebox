@@ -44,11 +44,27 @@
           </div>
           {% endif %}
 
-            <br/>
-            <div class="progress progress-warning" style="width:80%;">
-                <div id="playing_bar" class="bar" style="width: 0%"></div>
-            </div>
+          <br/>
 
+          <div class="progress progress-warning" style="width:80%;">
+            <div id="playing_bar" class="bar" style="width:0%"></div>
+            <script>
+              var started = {{now_playing.played_on|date:"U"}} * 1000;
+              var finish = started + 1000 * {{ now_playing.track.length }};
+              var now = (new Date).getTime();
+              var total = finish - started;
+              var remaining = finish - now;
+
+              var pct_played = 100;
+              if (remaining > 0) {
+                pct_played = 100-(remaining / total * 100);
+
+                // bound it
+                pct_played = Math.max(0, Math.min(pct_played, 100));
+              }
+              $("#playing_bar").css("width", pct_played + "%");
+            </script>
+          </div>
 
             <!--
             {% with now_playing.track.user_requests|length as requested %}
@@ -107,7 +123,6 @@
   </div>
 
 <script>
-
   function reloadPlaying(){
     $.pjax({
       push: false,
@@ -117,21 +132,18 @@
   }
   
   {% if now_playing.played_on %}
-
   var started = {{now_playing.played_on|date:"U"}} * 1000;
   var finish = started + 1000 * {{ now_playing.track.length }};
   var now = (new Date()).getTime();
 
-  console.log("{{now_playing.played_on}} vs " + (new Date()));
-
   if (now < finish){
-    var offset = 1000 * Math.random() + 3000;
+    var offset = 1000 * Math.random() + 4000;
     setTimeout(reloadPlaying, finish - now + offset);
   } else {
     setTimeout(reloadPlaying, 5000);
   }
   {% else %}
-  setTimeout(reloadPlaying, 15000);
+    setTimeout(reloadPlaying, 15000);
   {% endif %}
 
   function advancePlayer() {
@@ -153,8 +165,6 @@
       }
   }
   setTimeout(advancePlayer, 100);
-
-
 </script>
 
 </div>
