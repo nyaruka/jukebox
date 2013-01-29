@@ -160,10 +160,9 @@ class Track(SmartModel):
         audio = mutagen.File(mp3_file, easy=True)
         user = self.created_by
 
+        album_name = "Unknown"
         if 'album' in audio:
             album_name = audio['album'][0][:64]
-        else:
-            album_name = "Unknown"
 
         artist_name = audio['artist'][0][:64]
         track_title = audio['title'][0][:128]
