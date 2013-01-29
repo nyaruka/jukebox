@@ -25,7 +25,7 @@ class Artist(SmartModel):
         return self.name
 
 class Album(SmartModel):
-    name = models.CharField(max_length=64, unique=True,
+    name = models.CharField(max_length=64,
                          help_text="The name of this album")
     artist = models.ForeignKey(Artist,
                            help_text="The artist who recorded this album", related_name="albums")
@@ -122,6 +122,9 @@ class Album(SmartModel):
     def __unicode__(self):
         return self.name
 
+    class Meta:
+        unique_together = ('name', 'artist')
+
 class Genre(SmartModel):
     name = models.CharField(max_length=32, unique=True,
                         help_text="The name of this genre")
@@ -198,6 +201,7 @@ class Track(SmartModel):
 
         albums = Album.objects.filter(artist=artist,
                                       name__iexact=album_name)
+
         if not albums:
             year = audio.get('date', None)
             if year:
