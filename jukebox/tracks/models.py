@@ -196,7 +196,8 @@ class Track(SmartModel):
         else:
             artist = artists[0]
 
-        albums = Album.objects.filter(name__iexact=album_name)
+        albums = Album.objects.filter(artist=artist,
+                                      name__iexact=album_name)
         if not albums:
             year = audio.get('date', None)
             if year:
