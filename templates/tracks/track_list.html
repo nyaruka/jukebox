@@ -15,7 +15,7 @@
 <div class="track-list">
 {% for track in track_list %}
 <div class="playlist-item">
-  <a onclick='javascript:playTrack("{% url requests.request_new %}?track={{ track.id }}")'>
+  <a onclick='javascript:playTrack("{% url 'requests.request_new' %}?track={{ track.id }}")'>
   <div class="track-cover" style="position:relative;">
     {% if track.album.cover %}
     {% thumbnail track.album.cover "120" crop="center" as im %}
@@ -33,7 +33,7 @@
      {{ track.name|truncatechars:"45" }}
     </div>
     <div class="track-artist">
-      <a href="{% url tracks.artist_read track.album.artist_id%}">{{ track.album.artist|truncatechars:"20" }}</a>
+      <a href="{% url 'tracks.artist_read' track.album.artist_id%}">{{ track.album.artist|truncatechars:"20" }}</a>
     </div>
   </div>
 </div>
@@ -41,7 +41,7 @@
 </div>
 
 <div class="pagination">
-  {% if page_obj.has_next or page_obj.number == 1 %}
+  {% if page_obj.has_next %}
   <a class="next" href="{{url_params|safe}}page={{page_obj.next_page_number}}">Next &rarr;</a>
   {% endif %}
 </div>

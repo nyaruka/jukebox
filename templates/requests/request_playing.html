@@ -22,7 +22,7 @@
             {{ now_playing.track.name }}
           </div>
           <div class="track-artist">
-            <a href="{% url tracks.artist_read now_playing.track.album.artist.id %}">{{ now_playing.track.album.artist.name }}</a>
+            <a href="{% url 'tracks.artist_read' now_playing.track.album.artist.id %}">{{ now_playing.track.album.artist.name }}</a>
           </div>
           <div class="track-album">
             {{ now_playing.track.album.name }}
@@ -113,8 +113,8 @@
               </p>
             </div>
 
-            <a class="btn btn-inverse" style="margin-right:10px" href="{% url tracks.track_create %}">Add Music</a>
-            <a class="btn btn-inverse" href="{% url tracks.track_list %}">Request Song</a>
+            <a class="btn btn-inverse" style="margin-right:10px" href="{% url 'tracks.track_create' %}">Add Music</a>
+            <a class="btn btn-inverse" href="{% url 'tracks.track_list' %}">Request Song</a>
           </div>
         </div>
       </div>

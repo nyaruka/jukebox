@@ -15,7 +15,7 @@
 <div class="artist-list">
 {% for artist in artist_list %}
 <div class="artist-item">
-  <a href="{% url tracks.artist_read artist.id %}">
+  <a href="{% url 'tracks.artist_read' artist.id %}">
   <div class="track-cover" style="position:relative;">
     {% if artist.cover %}
     {% thumbnail artist.cover "120" crop="center" as im %}
@@ -37,7 +37,7 @@
 </div>
 
 <div class="pagination">
-  {% if page_obj.has_next or page_obj.number == 1 %}
+  {% if page_obj.has_next %}
   <a class="next" href="{{url_params|safe}}page={{page_obj.next_page_number}}">Next &rarr;</a>
   {% endif %}
 </div>

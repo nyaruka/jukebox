@@ -113,14 +113,14 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.static',    
     'django.contrib.messages.context_processors.messages',
     'django.core.context_processors.request',
-    'requests.context_processors.now_playing',
+    'jukebox.requests.context_processors.now_playing',
 )
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'cached_auth.middleware.AuthenticationMiddleware',
+    'jukebox.cached_auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.locale.LocaleMiddleware'
 )
@@ -141,10 +141,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.markup',
     'django.contrib.humanize',
-
-    'south',
 
     # mo-betta permission management
     'guardian',
@@ -155,30 +152,19 @@ INSTALLED_APPS = (
     # compress our CSS and js
     'compressor',
 
-    # rapidsms
-    'rapidsms',
-    'rapidsms_httprouter',
-
     # smartmin
     'smartmin',
-    'modeltranslation',
 
     'django_quickblocks',
 
     # user management
     'smartmin.users',
 
-    # translation of messages
-    'nsms.text',
-
-    # console
-    'nsms.console',
-
     # tracks
-    'tracks',
+    'jukebox.tracks',
 
     # requests
-    'requests',
+    'jukebox.requests',
     'sorl.thumbnail',
 )
 

@@ -3,7 +3,7 @@
 
 {% block login %}
 {% if not  request.user.is_authenticated %} 
-<li class="pull-right"><a href="{% url users.user_register %}">Register</a></li>{% endif %}
+<li class="pull-right"><a href="{% url 'users.user_register' %}">Register</a></li>{% endif %}
 {% endblock %} 
 
 

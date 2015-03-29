@@ -1,8 +1,8 @@
 from django.core.management.base import BaseCommand, CommandError
 import datetime
 from optparse import make_option
-from requests.models import Request, Vote
-from tracks.models import Track
+from jukebox.requests.models import Request, Vote
+from jukebox.tracks.models import Track
 from subprocess import call
 import sys
 import os

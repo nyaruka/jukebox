@@ -26,7 +26,7 @@
     <div class="row track-list-item">
       <div class="span6 track-name">{{ track.name }}</div>
       <div class="span1 track-length">{{ track.get_length }}</div>
-      <div class="span1 pull-right"><a class="btn btn-mini posterize" href="{% url requests.request_new %}?track={{ track.id }}">Request</a></div>
+      <div class="span1 pull-right"><a class="btn btn-mini posterize" href="{% url 'requests.request_new' %}?track={{ track.id }}">Request</a></div>
       
     </div>
             {% endfor %}

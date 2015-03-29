@@ -1,6 +1,6 @@
 from django.db import models
 from smartmin.models import SmartModel
-from tracks.models import *
+from jukebox.tracks.models import *
 import datetime
 import time
 import pickle

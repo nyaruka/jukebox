@@ -1,6 +1,6 @@
 Django==1.4
 Markdown==2.0.3
-PIL==1.1.7
+pillow
 RapidSMS==0.9.6a
 South
 anyjson==0.3.3
@@ -12,7 +12,7 @@ django-guardian
 -e git+https://github.com/nyaruka/django-modeltranslation.git@#egg=django_modeltranslation-dev
 django-nose==0.1.3
 django-picklefield==0.2.1
-django-quickblocks==0.9.1
+-e git+http://github.com/nyaruka/django-quickblocks#egg=django-quickblocks-dev
 gunicorn==0.13.4
 nose==1.1.2
 -e git+http://github.com/nyaruka/nsms#egg=nsms-dev
@@ -24,7 +24,10 @@ pytz==2011k
 raven==2.0.0
 redis==2.7.1
 simplejson==2.2.1
-urllib3==0.4.1
+urllib3
 sorl-thumbnail
 django-redis==3.1.5
 hiredis
+mysql-python
+django-debug-toolbar
+mutagen

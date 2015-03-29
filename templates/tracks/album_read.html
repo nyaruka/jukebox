@@ -11,7 +11,7 @@
 <tr>
   <td>{{ track.name }}</td>
   <td>{{ track.length }}</td>
-  <td><a href="{% url requests.request_new %}?track={{track.id}}" class="btn posterize">Request</a>
+  <td><a href="{% url 'requests.request_new' %}?track={{track.id}}" class="btn posterize">Request</a>
 </tr>
 {% endfor %}
 </table>

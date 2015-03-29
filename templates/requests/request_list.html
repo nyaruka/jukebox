@@ -25,7 +25,7 @@
 
                         <div class="track-artist">
                           {% if r.track.album %}
-                          <a href="{% url tracks.artist_read r.track.album.artist.id%}">{{ r.track.album.artist.name }}</a>
+                          <a href="{% url 'tracks.artist_read' r.track.album.artist.id%}">{{ r.track.album.artist.name }}</a>
                           {% endif %}
                         </div>
                           {% if r.created_by.id != -1 %}
@@ -61,7 +61,7 @@
         </div>
 
   <div class="pagination">
-    {% if page_obj.has_next or page_obj.number == 1 %}
+    {% if page_obj.has_next %}
     <a class="next" href="{{url_params|safe}}page={{page_obj.next_page_number}}">Next &rarr;</a>
     {% endif %}
   </div>
@@ -94,13 +94,13 @@
   function reloadPlaying(){
     $.pjax({
       push: false,
-      url: '{% url requests.request_playing %}',
+      url: "{% url 'requests.request_playing' %}"",
       container: '#playing_pjax'
     });
 
     $.pjax({
       push: false,
-      url: '{% url requests.request_list %}?pjax=true',
+      url: "{% url 'requests.request_list' %}?pjax=true",
       container: '#pjax'
     });
   }

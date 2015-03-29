@@ -22,3 +22,5 @@ config/
 *.log
 sitestatic/*
 supervisor.conf
+
+.idea/

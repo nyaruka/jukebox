@@ -3,7 +3,7 @@ from smartmin.views import *
 from .models import *
 from django.core.cache import cache
 from django import forms
-from tracks.models import *
+from jukebox.tracks.models import *
 from django.shortcuts import redirect
 import cPickle as pickle
 import json
@@ -23,6 +23,7 @@ class RequestForm(forms.ModelForm):
         return cleaned_data
 
     class Meta:
+        fields = ('track',)
         model = Request
 
 class RequestCRUDL(SmartCRUDL):

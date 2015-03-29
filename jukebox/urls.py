@@ -1,20 +1,16 @@
-from django.conf.urls.defaults import patterns, include, url
+from django.conf.urls import patterns, include, url
 from django.contrib.auth.decorators import permission_required, login_required
 from rapidsms_httprouter.views import console
 from django.conf import settings
 
 urlpatterns = patterns('',
-    url(r'^users/', include('users.urls')),
-    url(r'^text/', include('nsms.text.urls')),
-    url('^console/', include('nsms.console.urls')),
-    url('', include('rapidsms_httprouter.urls')),
+    url(r'^users/', include('jukebox.users.urls')),
 
     # add your apps here
-    url('', include('requests.urls')),
-    url('^mileage/', include('mileage.urls')),
+    url('', include('jukebox.requests.urls')),
 
-    url('^tracks/', include('tracks.urls')),
-    url('^playlists/', include('requests.urls')),
+    url('^tracks/', include('jukebox.tracks.urls')),
+    url('^playlists/', include('jukebox.requests.urls')),
 )
 
 # site static for development
