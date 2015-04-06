@@ -45,13 +45,13 @@ class Album(SmartModel):
     def fetch_image_url(self, query_string):
         got_result = False
         tries = 0
-        
         while tries < 3:
             try:
-                url = "http://www.albumart.org/index.php?skey=" + quote_plus(query_string) + "&itempage=1&newsearch=1&searchindex=Music"
+                url = "http://www.seekacover.com/cd/" + quote_plus(query_string)
                 print "fetching: %s" % url
                 content = urlopen(url).read()
-                match = re.search('.*href="(.*?)" title="View larger image"', content)
+                match = re.search('<li><img src="(.*?)" title=".* CD Covers"></li>', content)
+                tries += 1
                 if match: 
                     return match.group(1)
                 else:
@@ -61,7 +61,7 @@ class Album(SmartModel):
 
     def find_album_art(self, track_name=None):
         album_name = re.sub('([^a-zA-Z0-9])', ' ', self.name)
-        album_name = re.sub('( +)', ' ', album_name)
+        album_name = re.sub('( +)|([Dd]eluxe)|([Vv]ersion)', ' ', album_name)
 
         artist_name = re.sub('([^a-zA-Z0-9])', ' ', self.artist.name)
         artist_name = re.sub('( +)', ' ', artist_name)
