@@ -1,6 +1,4 @@
 from django.conf.urls import patterns, include, url
-from django.contrib.auth.decorators import permission_required, login_required
-from rapidsms_httprouter.views import console
 from django.conf import settings
 
 urlpatterns = patterns('',

@@ -1,1 +1,1 @@
-settings.py.mysql
+settings.py.dev

@@ -24,22 +24,6 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
-# Set your production database settings here
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'jukebox',                   # Or path to database file if using sqlite3.
-        'USER': 'jukebox',                      # Not used with sqlite3.
-        'PASSWORD': 'nyaruka',                  # Not used with sqlite3.
-        'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-        'OPTIONS': {
-               "init_command": "SET storage_engine=MYISAM",
-               "charset": "utf8", 
-        }  
-    }
-}
-
 # set this to something secure
 ROUTER_PASSWORD = 'password'
 
@@ -47,25 +31,5 @@ ROUTER_URL = None
 ROUTER_WORKERS = 0
 
 MEDIA_ROOT = '/home/jukebox/media'
-
-###
-# Redis configuration
-###
-
-REDIS_PORT=6379
-REDIS_HOST='localhost'
-REDIS_DB=1
-
-# our redis cache setup
-CACHES = {
-    'default': {
-        'BACKEND': 'redis_cache.cache.RedisCache',
-        'LOCATION': 'localhost:6379:1',
-        'OPTIONS': {
-            'DB': 1,
-            'PARSER_CLASS': 'redis.connection.HiredisParser',
-        },
-    },
-}
 
 
