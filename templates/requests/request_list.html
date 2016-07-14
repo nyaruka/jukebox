@@ -10,13 +10,11 @@
                 <div class="row playlist-item {% if r.track.id == now_playing.track.id %}playing{% endif %}">
 
                         <div class="track-cover">
-                        {% if r.track.album.cover %}
                            {% thumbnail r.track.album.cover "100x100" crop="center" as im %}
                            <img src="{{ im.url }}" width="100px" height="100px"/>
-                           {% endthumbnail %}
-                        {% else %}
+                           {% empty %}
                             <img src="{{ STATIC_URL }}/img/missing.png" width="100%"/>
-                        {% endif %}
+                           {% endthumbnail %}
                         </div>
 
                         <div class="track-name">

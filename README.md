@@ -30,7 +30,7 @@ These instructions are for Unix/OS X, you will have to modify these a bit to get
 #### 4. Initialize our database:
 
 ```
-  % python manage.py syncdb
+  % python manage.py makemigrations thumbnail
   % python manage.py migrate
 ```
 
