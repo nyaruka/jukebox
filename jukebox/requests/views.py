@@ -1,6 +1,5 @@
 from smartmin.views import *
 from .models import *
-from django.core.cache import cache
 from django import forms
 from jukebox.tracks.models import *
 from django.shortcuts import redirect
