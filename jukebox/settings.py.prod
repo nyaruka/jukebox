@@ -1,7 +1,7 @@
 # import our default settings
 from settings_common import *
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 # these guys will get email from sentry
@@ -12,7 +12,7 @@ ADMINS = (
 MANAGERS = ADMINS
 
 # add gunicorn
-INSTALLED_APPS = INSTALLED_APPS + ('gunicorn',)
+INSTALLED_APPS = INSTALLED_APPS
 
 # static dir is different for prod
 STATIC_URL = '/sitestatic/'
@@ -24,12 +24,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
-# set this to something secure
-ROUTER_PASSWORD = 'password'
-
-ROUTER_URL = None
-ROUTER_WORKERS = 0
-
 MEDIA_ROOT = '/home/jukebox/media'
 
+ALLOWED_HOSTS = ['jukebox.chispa.io', 'localhost']
 
