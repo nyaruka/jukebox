@@ -17,7 +17,7 @@ class ArtistCRUDL(SmartCRUDL):
             queryset = None
             cacheResult = False
 
-            if not self.request.REQUEST.keys():
+            if not self.request.GET.keys():
                 queryset = cache.get('artist_list')
                 cacheResult = True
 
@@ -70,7 +70,7 @@ class TrackCRUDL(SmartCRUDL):
             queryset = None
             cacheResult = False
 
-            if not self.request.REQUEST.keys():
+            if not self.request.GET.keys():
                 queryset = cache.get('track_list')
                 cacheResult = True
 

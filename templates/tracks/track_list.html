@@ -17,13 +17,11 @@
 <div class="playlist-item">
   <a onclick='javascript:playTrack("{% url 'requests.request_new' %}?track={{ track.id }}")'>
   <div class="track-cover" style="position:relative;">
-    {% if track.album.cover %}
     {% thumbnail track.album.cover "120" crop="center" as im %}
     <img class="cover" src="{{ im.url }}" width="120px" height="120px"/>
-    {% endthumbnail %}
-    {% else %}
+    {% empty %}
     <img class="cover" src="{{ STATIC_URL }}/img/missing.png" width="120px" height="120px"/>
-    {% endif %}
+    {% endthumbnail %}
     <img class="play-button" src="{{ STATIC_URL }}img/play.png">
   </div>
   </a>

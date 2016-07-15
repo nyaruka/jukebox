@@ -17,13 +17,11 @@
 <div class="artist-item">
   <a href="{% url 'tracks.artist_read' artist.id %}">
   <div class="track-cover" style="position:relative;">
-    {% if artist.cover %}
     {% thumbnail artist.cover "120" crop="center" as im %}
     <img class="cover" src="{{ im.url }}" width="120px" height="120px"/>
-    {% endthumbnail %}
-    {% else %}
+    {% empty %}
     <img class="cover" src="{{ STATIC_URL }}/img/missing.png" width="120px" height="120px"/>
-    {% endif %}
+    {% endthumbnail %}
   </div>
   </a>
 
