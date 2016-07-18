@@ -238,7 +238,8 @@ PERMISSIONS = {
           'list',# can view a list of the objects
           'new'),  
     # Add new object level permissions here:
-    'requests.request': ('radio',)
+    'requests.request': ('radio',),
+    'tracks.album': ('recover',)
 }
 
 # assigns the permissions that each group should have

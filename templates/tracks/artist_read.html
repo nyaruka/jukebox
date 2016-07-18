@@ -6,7 +6,13 @@
 
     {% for album in object.albums.all %}
 <div class="row">
-  <div class="span12 album-name">{{ album.name }}</div>
+  <div class="span12 album-name">
+      {% if perms.tracks.album_update %}
+      <a href="{% url 'tracks.album_update' album.id %}">{{ album.name }}</a>
+      {% else %}
+      {{ album.name }}
+      {% endif %}
+  </div>
 </div>
 <div class="row album-container">
   <div class="span3 album-list-item">
@@ -24,7 +30,13 @@
   <div class="span8 track-list">
     {% for track in album.tracks.all %}
     <div class="row track-list-item">
-      <div class="span6 track-name">{{ track.name }}</div>
+      <div class="span6 track-name">
+          {% if perms.tracks.track_update %}
+          <a href="{% url 'tracks.track_update' track.id %}">{{ track.name }}</a>
+          {% else %}
+          {{ track.name }}
+          {% endif %}
+      </div>
       <div class="span1 track-length">{{ track.get_length }}</div>
       <div class="span1 pull-right"><a class="btn btn-mini posterize" href="{% url 'requests.request_new' %}?track={{ track.id }}">Request</a></div>
       
@@ -44,6 +56,14 @@
 
   .album-list-item {
 
+  }
+
+  .track-name a {
+      color: #333;
+  }
+
+  .album-name a {
+      color: #333;
   }
 
   .album-name {
