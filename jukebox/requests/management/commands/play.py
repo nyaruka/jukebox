@@ -1,13 +1,10 @@
 from django.core.management.base import BaseCommand, CommandError
 import datetime
-from optparse import make_option
 from jukebox.requests.models import Request, Vote
-from jukebox.tracks.models import Track
 from subprocess import call
 import sys
-import os
-from time import sleep
 from django.contrib.auth.models import User
+from django_redis import get_redis_connection
 import redis
 import cPickle as pickle
 
@@ -16,7 +13,7 @@ class Command(BaseCommand):
     
     def handle(self, *args, **options):
         user = User.get_anonymous()
-        r = redis.StrictRedis(host='localhost', port=6379, db=1)
+        r = get_redis_connection('default')
 
         while(True):
             try:
@@ -74,8 +71,3 @@ class Command(BaseCommand):
                 import traceback
                 traceback.print_exc()
                 sys.exit(1)
-
-
-            
-                    
-            

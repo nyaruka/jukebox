@@ -1,12 +1,10 @@
-from django.db.models import Count
 from smartmin.views import *
 from .models import *
-from django.core.cache import cache
 from django import forms
 from jukebox.tracks.models import *
 from django.shortcuts import redirect
+from django_redis import get_redis_connection
 import cPickle as pickle
-import json
 
 class RequestForm(forms.ModelForm):
     tracks = Track.objects.filter(is_active=True).exclude(name='')
@@ -56,18 +54,17 @@ class RequestCRUDL(SmartCRUDL):
             return context
 
         def get_queryset(self, *args, **kwargs):
-            # grab our redis client connection
-            redis = cache.client.client
+            r = get_redis_connection("default")
 
-            if not self.request.REQUEST.keys():
-                if not redis.exists('requests'):
+            if not self.request.GET.keys():
+                if not r.exists('requests'):
                     queryset = super(RequestCRUDL.List, self).get_queryset(*args, **kwargs)
                     result = []
                     for request in list(queryset[:25]):
                         result.append(request.as_dict())
-                        redis.rpush('requests', pickle.dumps(request.as_dict(), -1))
+                        r.rpush('requests', pickle.dumps(request.as_dict(), -1))
                 else:
-                    result = [pickle.loads(_) for _ in redis.lrange('requests', 0, 25)]
+                    result = [pickle.loads(_) for _ in r.lrange('requests', 0, 25)]
             else:
                 result = super(RequestCRUDL.List, self).get_queryset(*args, **kwargs)
 
@@ -91,11 +88,12 @@ class RequestCRUDL(SmartCRUDL):
             obj = super(RequestCRUDL.New, self).post_save(obj)
             obj_dict = obj.as_dict()
 
-            cache.client.client.lpush('requests', pickle.dumps(obj_dict, -1))
+            r = get_redis_connection("default")
+            r.lpush('requests', pickle.dumps(obj_dict, -1))
 
             # if there is no next up track, set it
-            if not cache.client.client.get('next_up'):
-                cache.client.client.set('next_up', pickle.dumps(obj_dict, -1))                
+            if not r.get('next_up'):
+                r.set('next_up', pickle.dumps(obj_dict, -1))
 
             return obj
 

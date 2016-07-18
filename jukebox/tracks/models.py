@@ -26,9 +26,9 @@ class Artist(SmartModel):
 
 class Album(SmartModel):
     name = models.CharField(max_length=64,
-                         help_text="The name of this album")
+                            help_text="The name of this album")
     artist = models.ForeignKey(Artist,
-                           help_text="The artist who recorded this album", related_name="albums")
+                               help_text="The artist who recorded this album", related_name="albums")
     year = models.IntegerField(null=True, blank=True,
                                help_text="The year this album was released")
     cover = models.ImageField(upload_to="covers", null=True, blank=True,

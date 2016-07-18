@@ -11,12 +11,12 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'jukebox',                      # Or path to database file if using sqlite3.
-        'USER': 'jukebox',                      # Not used with sqlite3.
-        'PASSWORD': 'jukebox',                  # Not used with sqlite3.
-        'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'jukebox.db',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': '',
     }
 }
 
@@ -143,6 +143,9 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.humanize',
 
+    # redis
+    'redis',
+
     # mo-betta permission management
     'guardian',
 
@@ -155,15 +158,11 @@ INSTALLED_APPS = (
     # smartmin
     'smartmin',
 
-    'django_quickblocks',
-
     # user management
     'smartmin.users',
 
     # tracks
     'jukebox.tracks',
-
-    # requests
     'jukebox.requests',
     'sorl.thumbnail',
 )
@@ -286,35 +285,12 @@ ANONYMOUS_USER_ID = -1
 # Async tasks with django-celery
 #-----------------------------------------------------------------------------------
 
-#import djcelery
-#djcelery.setup_loader()
-
 CELERY_RESULT_BACKEND = 'database'
 
 BROKER_BACKEND = 'redis'
 BROKER_HOST = 'localhost'
 BROKER_PORT = 6379
 BROKER_VHOST = '4'
-
-#-----------------------------------------------------------------------------------
-# Django-Nose config
-#-----------------------------------------------------------------------------------
-
-TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-SOUTH_TESTS_MIGRATE = False
-
-#-----------------------------------------------------------------------------------
-# SMS Configs
-#-----------------------------------------------------------------------------------
-
-RAPIDSMS_TABS = []
-SMS_APPS = [ 'requests' ]
-
-# change this to your specific backend for your install
-DEFAULT_BACKEND = "console"
-
-# change this to the country code for your install
-DEFAULT_COUNTRY_CODE = "250"
 
 #-----------------------------------------------------------------------------------
 # Debug Toolbar
@@ -328,16 +304,22 @@ DEBUG_TOOLBAR_CONFIG = {
 }
 
 #-----------------------------------------------------------------------------------
-# Crontab Settings .. uncomment if you want to use Celery's crontab-like
-# functionality.
+# Redis configuration
 #-----------------------------------------------------------------------------------
 
-#from datetime import timedelta
+REDIS_PORT = 6379
+REDIS_HOST = 'localhost'
+REDIS_DB = 12
 
-#CELERYBEAT_SCHEDULE = {
-#    "runs-every-hour": {
-#        "task": "reminders.tasks.check_reminders",
-#        "schedule": timedelta(hours=1),
-#    },
-#}
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://%s:%s/%s" % (REDIS_HOST, REDIS_PORT, REDIS_DB),
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
 
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"

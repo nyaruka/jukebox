@@ -17,13 +17,11 @@
 <div class="row album-container">
   <div class="span3 album-list-item">
     <div class="cover">
-    {% if album.cover %}
-      {% thumbnail album.cover "350" crop="center" as im %}
-      <img src="{{ im.url }}" width="100%"/>
-      {% endthumbnail %}
-    {% else %}
-        <img src="{{ STATIC_URL }}/img/missing.png" width="100%"/>
-    {% endif %}
+    {% thumbnail album.cover "350" crop="center" as im %}
+    <img src="{{ im.url }}" width="100%"/>
+    {% empty %}
+    <img src="{{ STATIC_URL }}/img/missing.png" width="100%"/>
+    {% endthumbnail %}
     </div>
   </div>
   <div class="span1">&nbsp;</div>

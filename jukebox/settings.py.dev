@@ -1,7 +1,7 @@
 # import our default settings
 from settings_common import *
 
-INSTALLED_APPS = INSTALLED_APPS + ('django_nose', 'debug_toolbar')
+INSTALLED_APPS = INSTALLED_APPS
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -12,6 +12,6 @@ ROUTER_PASSWORD = 'klab'
 
 INTERNAL_IPS = ('127.0.0.1',)
 
-MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + ('debug_toolbar.middleware.DebugToolbarMiddleware',)
+MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES
 
 
