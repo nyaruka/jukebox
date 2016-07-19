@@ -7,6 +7,7 @@ from jukebox.requests.models import Request, Vote
 from subprocess import call
 from django.contrib.auth.models import User
 from django_redis import get_redis_connection
+from django.utils import timezone
 
 class Command(BaseCommand):
     option_list = BaseCommand.option_list
@@ -41,24 +42,31 @@ class Command(BaseCommand):
                         request.save()
                     
                 if not playlist:
-                    # find all songs that have been requested by real users
-                    requests = Request.objects.exclude(created_by_id=-1)
+                    now = timezone.now()
+                    if now.hour > 9 and now.hour < 17 and now.isoweekday() < 6:
+                        # find all songs that have been requested by real users
+                        requests = Request.objects.exclude(created_by_id=-1)
 
-                    # now exclude any song that has ever been voted down
-                    requests = requests.exclude(track_id__in=[t.track_id for t in Vote.objects.filter(score=-1)])
+                        # now exclude any song that has ever been voted down
+                        requests = requests.exclude(track_id__in=[t.track_id for t in Vote.objects.filter(score=-1)])
 
-                    # exclude anything that has been played recently
-                    window = datetime.datetime.now() - datetime.timedelta(hours=6)
-                    requests = requests.exclude(track_id__in=[t.track_id for t in Request.objects.filter(created_on__gt=window)])
+                        # exclude anything that has been played recently
+                        window = datetime.datetime.now() - datetime.timedelta(hours=6)
+                        requests = requests.exclude(track_id__in=[t.track_id for t in Request.objects.filter(created_on__gt=window)])
 
-                    if requests:
-                        requests = requests.order_by('?')
-                        request = Request.objects.create(track=requests[0].track,
-                                                         created_by=user,
-                                                         modified_by=user,
-                                                         played_on=None)
-                        r.lpush('requests', pickle.dumps(request.as_dict(), -1))
-                        r.ltrim('requests', 0, 100)
+                        if requests:
+                            requests = requests.order_by('?')
+                            request = Request.objects.create(track=requests[0].track,
+                                                             created_by=user,
+                                                             modified_by=user,
+                                                             played_on=None)
+                            r.lpush('requests', pickle.dumps(request.as_dict(), -1))
+                            r.ltrim('requests', 0, 100)
+                    else:
+                        print "%s - no longer workday, skipping" % now
+
+                        # wait a bit before checking again
+                        time.sleep(15)
                         
                 # for the bug of tracks stucking on the playing status because of an unexpected system halt
                 request_completed = Request.objects.filter(status='P').order_by('created_on')

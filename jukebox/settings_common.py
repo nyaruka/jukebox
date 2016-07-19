@@ -31,8 +31,7 @@ EMAIL_USE_TLS = True
 # timezone as the operating system.
 # If running in a Windows environment this must be set to the same as your
 # system time zone
-TIME_ZONE = 'GMT'
-USER_TIME_ZONE = 'Africa/Kigali'
+TIME_ZONE = None
 
 MODELTRANSLATION_TRANSLATION_REGISTRY = "translation"
 
