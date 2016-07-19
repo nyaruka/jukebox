@@ -1,12 +1,12 @@
-from django.core.management.base import BaseCommand, CommandError
+import sys
+import time
 import datetime
+import cPickle as pickle
+from django.core.management.base import BaseCommand, CommandError
 from jukebox.requests.models import Request, Vote
 from subprocess import call
-import sys
 from django.contrib.auth.models import User
 from django_redis import get_redis_connection
-import redis
-import cPickle as pickle
 
 class Command(BaseCommand):
     option_list = BaseCommand.option_list
@@ -60,14 +60,16 @@ class Command(BaseCommand):
                         r.lpush('requests', pickle.dumps(request.as_dict(), -1))
                         r.ltrim('requests', 0, 100)
                         
-                    # for the bug of tracks stucking on the playing status because of an unxpected system halt 
-                    request_completed = Request.objects.filter(status='P').order_by('created_on')
-                    for req in request_completed:
-                        if long((datetime.datetime.now() - req.played_on).total_seconds()) > req.track.length:
-                            req.status = 'C'
-                            req.save()
+                # for the bug of tracks stucking on the playing status because of an unexpected system halt
+                request_completed = Request.objects.filter(status='P').order_by('created_on')
+                for req in request_completed:
+                    if long((datetime.datetime.now() - req.played_on).total_seconds()) > req.track.length:
+                        req.status = 'C'
+                        req.save()
 
             except:
                 import traceback
                 traceback.print_exc()
-                sys.exit(1)
+
+            finally:
+                time.sleep(1)
