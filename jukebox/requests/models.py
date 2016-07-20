@@ -5,6 +5,7 @@ import datetime
 import time
 import pickle
 
+
 class Request(SmartModel):
     STATUS_CHOICES = (('Q', "Queued"),
                       ('P', "Playing"),
@@ -35,7 +36,7 @@ class Request(SmartModel):
         return diff
 
     def __unicode__(self):
-	return "[%s] %s" % (self.status, self.track.name)
+        return "[%s] %s" % (self.status, self.track.name)
 
     def as_dict(self):
         album = None

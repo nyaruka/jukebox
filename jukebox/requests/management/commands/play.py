@@ -22,7 +22,7 @@ class Command(BaseCommand):
                 
                 for index, request in enumerate(playlist):
                     request.status = 'P'
-                    request.played_on = datetime.datetime.now()
+                    request.played_on = timezone.now()
                     request.save()
 
                     try:                            
