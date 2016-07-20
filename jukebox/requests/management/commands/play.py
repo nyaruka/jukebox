@@ -2,11 +2,13 @@ import sys
 import time
 import datetime
 import cPickle as pickle
+import pytz
 from django.core.management.base import BaseCommand, CommandError
 from jukebox.requests.models import Request, Vote
 from subprocess import call
 from django.contrib.auth.models import User
 from django_redis import get_redis_connection
+from django.conf import settings
 from django.utils import timezone
 
 class Command(BaseCommand):
@@ -42,7 +44,7 @@ class Command(BaseCommand):
                         request.save()
                     
                 if not playlist:
-                    now = timezone.now()
+                    now = datetime.now()
                     if now.hour > 9 and now.hour < 17 and now.isoweekday() < 6:
                         # find all songs that have been requested by real users
                         requests = Request.objects.exclude(created_by_id=-1)
