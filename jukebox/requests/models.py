@@ -1,10 +1,10 @@
 from django.db import models
 from smartmin.models import SmartModel
 from jukebox.tracks.models import *
+from django.utils import timezone
 import datetime
 import time
 import pickle
-
 
 class Request(SmartModel):
     STATUS_CHOICES = (('Q', "Queued"),
@@ -30,7 +30,7 @@ class Request(SmartModel):
 
     def get_elapsed(self):
         if self.status == "P":
-            diff = (datetime.datetime.now()- self.played_on).total_seconds()
+            diff = (timezone.now() - self.played_on).total_seconds()
         else:
             diff = 0
         return diff

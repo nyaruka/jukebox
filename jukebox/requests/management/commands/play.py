@@ -44,8 +44,10 @@ class Command(BaseCommand):
                         request.save()
                     
                 if not playlist:
-                    now = datetime.now()
-                    if now.hour > 9 and now.hour < 17 and now.isoweekday() < 6:
+                    user_tz = pytz.timezone(settings.USER_TIME_ZONE)
+                    now = user_tz.normalize(timezone.now())
+                    print now.hour
+                    if now.hour >= 9 and now.hour <= 17 and now.isoweekday() < 6:
                         # find all songs that have been requested by real users
                         requests = Request.objects.exclude(created_by_id=-1)
 
@@ -53,7 +55,7 @@ class Command(BaseCommand):
                         requests = requests.exclude(track_id__in=[t.track_id for t in Vote.objects.filter(score=-1)])
 
                         # exclude anything that has been played recently
-                        window = datetime.datetime.now() - datetime.timedelta(hours=6)
+                        window = timezone.now() - datetime.timedelta(hours=6)
                         requests = requests.exclude(track_id__in=[t.track_id for t in Request.objects.filter(created_on__gt=window)])
 
                         if requests:
@@ -73,7 +75,7 @@ class Command(BaseCommand):
                 # for the bug of tracks stucking on the playing status because of an unexpected system halt
                 request_completed = Request.objects.filter(status='P').order_by('created_on')
                 for req in request_completed:
-                    if long((datetime.datetime.now() - req.played_on).total_seconds()) > req.track.length:
+                    if long((timezone.now() - req.played_on).total_seconds()) > req.track.length:
                         req.status = 'C'
                         req.save()
 

@@ -31,7 +31,10 @@ EMAIL_USE_TLS = True
 # timezone as the operating system.
 # If running in a Windows environment this must be set to the same as your
 # system time zone
+from tzlocal import get_localzone
+USER_TIME_ZONE = str(get_localzone())
 TIME_ZONE = 'UTC'
+USE_TZ = True
 
 MODELTRANSLATION_TRANSLATION_REGISTRY = "translation"
 
